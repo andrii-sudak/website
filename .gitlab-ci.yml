@@ -1,13 +1,42 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/user/application_security/secret_detection/pipeline/configure
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
-stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+image: ubuntu:24.04
+
+variables:
+  HUGO_VERSION: "0.147.2"
+  GIT_SUBMODULE_STRATEGY: recursive
+  HUGO_ENV: production
+  DEBIAN_FRONTEND: noninteractive
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}-hugo-binary-ubuntu
+  paths:
+    - .hugo_binary/hugo
+
+before_script:
+  - apt-get update -qq
+  - apt-get install -y --no-install-recommends curl tar gzip ca-certificates git libc-bin
+  - |
+    if [ ! -f ".hugo_binary/hugo" ]; then
+      HUGO_DOWNLOAD_URL="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+      mkdir -p .hugo_binary
+      curl -sL "${HUGO_DOWNLOAD_URL}" -o hugo.tar.gz
+      tar -C .hugo_binary -zxvf hugo.tar.gz hugo
+      rm hugo.tar.gz
+      chmod +x .hugo_binary/hugo
+    else
+      echo "Hugo binary v$(./.hugo_binary/hugo version) found in cache."
+    fi
+
+pages:
+  stage: deploy
+  script:
+    - ./.hugo_binary/hugo \
+        -d public \
+        --minify \
+        --baseURL https://andrii-sudak.com/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+    - when: never
