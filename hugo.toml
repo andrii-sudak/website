@@ -1,0 +1,4 @@
+baseURL = 'https://andrii-sudak.com'
+languageCode = 'en-us'
+title = "Andrii Sudak's Website"
+theme = "ananke"
