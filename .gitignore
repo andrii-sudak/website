@@ -1,0 +1,15 @@
+
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+
+*.log
+.env
+
+public/
+resources/
+.hugo_build.lock
+hugo_stats.json
