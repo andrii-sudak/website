@@ -1,0 +1,53 @@
+---
+name: Deploy Hugo Site to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+
+env:
+  HUGO_VERSION: 0.147.2
+  HUGO_ENV: production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+          extended: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build with Hugo
+        run: |
+          hugo \
+            -d public \
+            --minify \
+            --baseURL https://andrii-sudak.com/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+
+      # and deploys it to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
