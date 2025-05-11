@@ -29,7 +29,8 @@ before_script:
 pages:
   stage: deploy
   script:
-    - ./.hugo_binary/hugo \
+    - |
+      ./.hugo_binary/hugo \
         -d public \
         --minify \
         --baseURL https://andrii-sudak.com/
