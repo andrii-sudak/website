@@ -11,5 +11,4 @@ public/
 resources/
 .hugo_build.lock
 hugo_stats.json
-go.mod
-go.sum
+
