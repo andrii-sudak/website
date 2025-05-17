@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  HUGO_VERSION: 0.147.2
+  HUGO_VERSION: 0.145.0
   HUGO_ENV: production
 
 jobs:
@@ -46,8 +46,6 @@ jobs:
         with:
           path: ./public
 
-
-      # and deploys it to GitHub Pages.
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
