@@ -8,6 +8,7 @@ on:
 env:
   HUGO_VERSION: 0.145.0
   HUGO_ENV: production
+  GO_VERSION: 1.24.3
 
 jobs:
   build-and-deploy:
@@ -24,6 +25,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
@@ -33,6 +39,9 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+
+      - name: Download Hugo Modules
+        run: hugo mod get -u
 
       - name: Build with Hugo
         run: |
