@@ -1,4 +1,18 @@
 baseURL = 'https://andrii-sudak.com'
 languageCode = 'en-us'
 title = "Andrii Sudak's Website"
-theme = "ananke"
+
+[params.author]
+name = "Andrii Sudak"
+image = "img/author.jpg"
+headline = "Father of two | Open-minded person | DevOps Engineeer | Ukraine, Lviv"
+links = [
+  { signal = "https://signal.me/#eu/f-BgZZjSQEjNUELD_Ez81P1YYo-EHWEryLLR0tjtyHpf-b6N0ddCOY5kKF7MnPMc" },
+  { threema = "https://threema.id/NXS5Y2VP" },
+  { gnupg = "https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D" },
+  { email = "mailto:contact@andrii-sudak.com" },
+  { github = "https://github.com/andrii-sudak" },
+  { mastodon = "https://infosec.exchange/@andrii_sudak" },
+  { youtube = "https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA" },
+  { soundcloud = "https://soundcloud.com/andrii-sudak" }
+]
