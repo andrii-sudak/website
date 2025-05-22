@@ -5,7 +5,7 @@ title = "Andrii Sudak's Website"
 [params.author]
 name = "Andrii Sudak"
 image = "img/author.jpg"
-headline = "Father of two | Open-minded person | DevOps Engineeer | Ukraine, Lviv"
+headline = "Father of two | Open-minded person | DevOps Engineer | Ukraine, Lviv"
 links = [
   { signal = "https://signal.me/#eu/f-BgZZjSQEjNUELD_Ez81P1YYo-EHWEryLLR0tjtyHpf-b6N0ddCOY5kKF7MnPMc" },
   { threema = "https://threema.id/NXS5Y2VP" },
