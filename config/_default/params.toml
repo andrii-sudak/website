@@ -1,2 +1,5 @@
 homepage.layout = "profile"
+
+darkMode = "auto"
+
 colorScheme = "avocado"
