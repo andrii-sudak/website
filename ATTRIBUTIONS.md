@@ -31,3 +31,14 @@ This project uses assets from other sources. We are grateful to their creators f
 * **LGPL v2.1 License Text:**
     * The full text of the LGPL v2.1 is available online at: [https://www.gnu.org/licenses/lgpl-2.1.html](https://www.gnu.org/licenses/lgpl-2.1.html)
     * A copy of `LGPL-2.1.txt` should also be included in this repository (e.g., in a `LICENSES/` directory).
+
+## SimpleX Chat Logo
+
+The SimpleX Chat icon used on this site is based on the original logos provided by the SimpleX Chat project.
+
+- **Source:** [SimpleX Chat Official Media Logos](https://github.com/simplex-chat/simplex-chat/tree/stable/media-logos)
+- **License:** The original assets are part of a project under the [AGPL-3.0 License](https://github.com/simplex-chat/simplex-chat/blob/stable/LICENSE).
+
+### Modifications
+
+The original logo was modified for use on this website. The changes include converting the multi-color design to a **single-color (monochromatic)** version to match the website's theme and allow for dynamic color changes (e.g., on hover).
