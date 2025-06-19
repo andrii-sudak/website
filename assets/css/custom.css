@@ -1,0 +1,77 @@
+/*FIXME: The light background is always white: https://github.com/jpanther/congo/discussions/1060*/
+
+:root {
+  /* Neutral Colors (Light Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
+  --color-neutral-50: 253, 246, 227;   /* Solarized base3 - lightest background */
+  --color-neutral-100: 238, 232, 213;  /* Solarized base2 - light background elements */
+  --color-neutral-200: 147, 161, 161;  /* Solarized base1 - subtle text/borders */
+  --color-neutral-300: 131, 148, 150;  /* Solarized base0 - main text on lighter elements */
+  --color-neutral-400: 101, 123, 131;  /* Solarized base00 - main text on page */
+  --color-neutral-500: 88, 110, 117;   /* Solarized base01 - darker text / headings */
+  --color-neutral-600: 7, 54, 66;      /* Solarized base02 - very dark (less used in light) */
+  --color-neutral-700: 0, 43, 54;       /* Solarized base03 - darkest (less used in light) */
+  --color-neutral-800: 0, 43, 54;       /* Solarized base03 - repeat for darkest shades */
+  --color-neutral-900: 0, 43, 54;       /* Solarized base03 - repeat for darkest shades */
+
+  /* Primary Colors (Light Theme) - Solarized Green */
+  --color-primary-50: 133, 153, 0;    /* Solarized Green (lighter shades can be same as 500 for simplicity) */
+  --color-primary-100: 133, 153, 0;   /* Solarized Green */
+  --color-primary-200: 133, 153, 0;   /* Solarized Green */
+  --color-primary-300: 133, 153, 0;   /* Solarized Green */
+  --color-primary-400: 133, 153, 0;   /* Solarized Green */
+  --color-primary-500: 133, 153, 0;   /* Solarized Green #859900 - Main Accent */
+  --color-primary-600: 133, 153, 0;   /* Solarized Green (darker shades can be same as 500) */
+  --color-primary-700: 133, 153, 0;   /* Solarized Green */
+  --color-primary-800: 133, 153, 0;   /* Solarized Green */
+  --color-primary-900: 133, 153, 0;   /* Solarized Green */
+
+  /* Secondary Colors (Light Theme) - Solarized Blue */
+  --color-secondary-50: 38, 139, 210;  /* Solarized Blue (lighter shades can be same as 500) */
+  --color-secondary-100: 38, 139, 210; /* Solarized Blue */
+  --color-secondary-200: 38, 139, 210; /* Solarized Blue */
+  --color-secondary-300: 38, 139, 210; /* Solarized Blue */
+  --color-secondary-400: 38, 139, 210; /* Solarized Blue */
+  --color-secondary-500: 38, 139, 210;  /* Solarized Blue #268bd2 - Secondary Accent */
+  --color-secondary-600: 38, 139, 210;  /* Solarized Blue (darker shades can be same as 500) */
+  --color-secondary-700: 38, 139, 210;  /* Solarized Blue */
+  --color-secondary-800: 38, 139, 210;  /* Solarized Blue */
+  --color-secondary-900: 38, 139, 210;  /* Solarized Blue */
+}
+
+html.dark :root {
+  /* Neutral Colors (Dark Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
+  --color-neutral-50: 7, 54, 66;        /* Solarized base02 - lightest background elements in dark */
+  --color-neutral-100: 0, 43, 54;       /* Solarized base03 - main page background */
+  --color-neutral-200: 88, 110, 117;   /* Solarized base01 - subtle text/borders */
+  --color-neutral-300: 101, 123, 131;  /* Solarized base00 - secondary text */
+  --color-neutral-400: 131, 148, 150;  /* Solarized base0 - main text */
+  --color-neutral-500: 147, 161, 161;  /* Solarized base1 - brighter text / headings */
+  --color-neutral-600: 238, 232, 213;  /* Solarized base2 - very light (less used in dark) */
+  --color-neutral-700: 253, 246, 227;   /* Solarized base3 - lightest (less used in dark) */
+  --color-neutral-800: 253, 246, 227;   /* Solarized base3 - repeat for lightest shades */
+  --color-neutral-900: 253, 246, 227;   /* Solarized base3 - repeat for lightest shades */
+
+  /* Primary Colors (Dark Theme) - Solarized Green (often same as light for accent consistency) */
+  --color-primary-50: 133, 153, 0;
+  --color-primary-100: 133, 153, 0;
+  --color-primary-200: 133, 153, 0;
+  --color-primary-300: 133, 153, 0;
+  --color-primary-400: 133, 153, 0;
+  --color-primary-500: 133, 153, 0;   /* Solarized Green #859900 */
+  --color-primary-600: 133, 153, 0;
+  --color-primary-700: 133, 153, 0;
+  --color-primary-800: 133, 153, 0;
+  --color-primary-900: 133, 153, 0;
+
+  /* Secondary Colors (Dark Theme) - Solarized Blue (often same as light) */
+  --color-secondary-50: 38, 139, 210;
+  --color-secondary-100: 38, 139, 210;
+  --color-secondary-200: 38, 139, 210;
+  --color-secondary-300: 38, 139, 210;
+  --color-secondary-400: 38, 139, 210;
+  --color-secondary-500: 38, 139, 210;  /* Solarized Blue #268bd2 */
+  --color-secondary-600: 38, 139, 210;
+  --color-secondary-700: 38, 139, 210;
+  --color-secondary-800: 38, 139, 210;
+  --color-secondary-900: 38, 139, 210;
+}
