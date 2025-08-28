@@ -1,7 +1,5 @@
-/*FIXME: The light background is always white: https://github.com/jpanther/congo/discussions/1060*/
-
 :root {
-  /* Neutral Colors (Light Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
+  --color-neutral: 253, 246, 227;      /* Neutral Colors (Light Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
   --color-neutral-50: 253, 246, 227;   /* Solarized base3 - lightest background */
   --color-neutral-100: 238, 232, 213;  /* Solarized base2 - light background elements */
   --color-neutral-200: 147, 161, 161;  /* Solarized base1 - subtle text/borders */
