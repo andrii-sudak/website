@@ -1,1 +1,9 @@
-#[[main]]
+[[main]]
+  name = "Main"
+  url = "/"
+  weight = 1
+
+[[main]]
+  name = "Contact"
+  url = "/contact/"
+  weight = 2

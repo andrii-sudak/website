@@ -1,7 +1,5 @@
 [params]
     autoSwitchAppearance=true
-#    colorScheme = "avocado"  # TODO: Change to the custom Solarized https://github.com/andrii-sudak/website/issues/2
-
     enableSearch = false
 
 [params.footer]

@@ -2,14 +2,6 @@
 
 ## Brand Assets & Trademarks
 
-### Signal Logo
-
-* The Signal logo used on this website is an official asset sourced from the Signal brand guidelines page: [https://signal.org/brand/](https://signal.org/brand/).
-* Signal® and the Signal logo are registered trademarks of Signal Messenger LLC.
-* The logo is used here to refer to the Signal messaging service and/or to link to an official Signal profile, in accordance with fair use principles for trademarks and Signal's published brand guidelines.
-* For display purposes on this website, the color of the Signal logo SVG may be adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes), effectively rendering it as a monochrome version consistent with official black or white variants provided by Signal. This adaptation is solely for thematic integration on this specific website.
-* This project/website is not affiliated with, sponsored, or endorsed by Signal Messenger LLC. All rights to the Signal brand and logo are reserved by Signal Messenger LLC.
-
 ### Threema Logo
 
 * The Threema logo used on this website is an official asset sourced from the Threema press page: [https://threema.com/en/press](https://threema.com/en/press).
@@ -42,3 +34,11 @@ The SimpleX Chat icon used on this site is based on the original logos provided 
 ### Modifications
 
 The original logo was modified for use on this website. The changes include converting the multi-color design to a **single-color (monochromatic)** version to match the website's theme and allow for dynamic color changes (e.g., on hover).
+
+## Messenger Logo
+
+*   **Asset File Path in this Repository:** `/assets/icons/messanger.svg`
+*   **Description:** This icon is based on the official Messenger logo.
+*   **Original Icon Source:** [Meta Brand Resources - Messenger Icon](https://www.meta.com/brand/resources/facebook/messenger-icon/)
+*   **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
+*   This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
