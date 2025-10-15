@@ -7,3 +7,8 @@
   name = "Contact"
   url = "/contact/"
   weight = 2
+
+[[main]]
+  name = "Book a Call"
+  url = "https://calendly.com/andrii-sudak/30min"
+  weight = 3
