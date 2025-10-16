@@ -85,3 +85,26 @@ a:hover, a:focus, a:active {
 a svg {
   fill: currentColor;
 }
+
+.author-photo {
+  border-radius: 28%;
+}
+
+img.rounded-full.medium-zoom-image {
+  border-radius: 28% !important;
+}
+
+.author-image-wrapper {
+  border-radius: 28%;
+  overflow: hidden;
+  width: 144px; /* or the desired width */
+  height: 144px; /* or the desired height */
+}
+
+.article-page .author-box .author-photo {
+  border-radius: 28%;
+}
+
+.author-box img {
+  border-radius: 28%;
+}

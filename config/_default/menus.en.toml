@@ -1,14 +1,14 @@
-[[main]]
-  name = "Main"
-  url = "/"
-  weight = 1
+#[[main]]
+#  name = "Posts"
+#  url = "/posts/"
+#  weight = 10
 
 [[main]]
   name = "Contact"
   url = "/contact/"
-  weight = 2
+  weight = 20
 
 [[main]]
   name = "Book a Call"
   url = "https://calendly.com/andrii-sudak/30min"
-  weight = 3
+  weight = 30
