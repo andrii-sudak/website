@@ -108,3 +108,9 @@ img.rounded-full.medium-zoom-image {
 .author-box img {
   border-radius: 28%;
 }
+
+header a > svg {
+  height: 2rem;
+  border-radius: 28%;
+  margin-left: 10px;
+}

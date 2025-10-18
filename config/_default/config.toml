@@ -1,6 +1,7 @@
 [params]
-    autoSwitchAppearance=true
+    autoSwitchAppearance = true
     enableSearch = false
+    logo = "img/logo.svg"
 
 [params.footer]
   showThemeAttribution = false
