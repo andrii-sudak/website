@@ -34,10 +34,9 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 
 ####
 
-1. {{< icon "simplex" >}} [Simplex](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
-2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
-3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG Key](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME certificate](/certs/contact-andrii-sudak-com-public.cer)
-4. {{< icon "threema" >}} [Threema](https://threema.id/NXS5Y2VP)
+1. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
+2. {{< icon "simplex" >}} [SimpleX](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
+3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
 5. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
 6. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
