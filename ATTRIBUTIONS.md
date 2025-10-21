@@ -33,6 +33,14 @@ The original logo was modified for use on this website. The changes include conv
 *   **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
 *   This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
 
+## XMPP Logo
+
+*   **Asset File Path in this Repository:** `/assets/icons/xmpp.svg`
+*   **Description:** This icon is based on the official XMPP logo.
+*   **Original Icon Source:** [XMPP Press Kit](https://xmpp.org/about/press-kit/)
+*   **Modifications:** The original logo's color has been adapted to `currentColor` and resized to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
+*   This project/website is not affiliated with, sponsored, or endorsed by the XMPP Standards Foundation. All rights to the XMPP brand and logo are reserved by the XMPP Standards Foundation.
+
 ## Microsoft Office
 
 *   Microsoft® Office is a registered trademark of Microsoft Corporation.
