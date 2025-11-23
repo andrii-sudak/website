@@ -35,7 +35,6 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 ####
 
 1. {{< icon "simplex" >}} [SimpleX](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
-1. {{< icon "xmpp" >}} [XMPP](xmpp:andrii-sudak@jabjab.de?omemo-sid-1733557070=dc0bda4fd71b721c0e68379346ee360eb1dd410aaf0cd0577890310e47184021) – OMEMO only
 2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
 3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
 5. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)

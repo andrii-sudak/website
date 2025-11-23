@@ -13,7 +13,6 @@ defaultFeaturedImage = "img/feature_default.png"
   headline = "Father of two | Open-minded person | DevOps Engineer | Poland, Krakow"
   links = [
     { simplex = "https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw" },
-    { xmpp = "xmpp:andrii-sudak@jabjab.de?omemo-sid-1733557070=dc0bda4fd71b721c0e68379346ee360eb1dd410aaf0cd0577890310e47184021" },
     { signal = "https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1" },
     { email = "mailto:contact@andrii-sudak.com" },
     { whatsapp = "https://wa.me/qr/HGVTMDBQGGE3A1" },
