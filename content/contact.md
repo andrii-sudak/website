@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2025-10-21T23:58:00+02:00
+date: 2025-12-12T23:42:00+02:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -23,7 +23,7 @@ I value privacy – both mine and yours. Services are arranged by priority.
 ####
 
 {{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-Confidential files are sent encrypted (AES-256) and password-protected as ZIP or Microsoft® Office documents. Please ensure any sensitive data you send to me is also encrypted.
+Confidential files are sent encrypted (AES-256) and password-protected as ZIP or encrypted OpenDocument formats. Please ensure any sensitive data you send to me is also encrypted.
 {{< /alert >}}
 
 ####

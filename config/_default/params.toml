@@ -14,9 +14,7 @@ defaultFeaturedImage = "img/feature_default.png"
   links = [
     { simplex = "https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw" },
     { signal = "https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1" },
-    { email = "mailto:contact@andrii-sudak.com" },
-    { whatsapp = "https://wa.me/qr/HGVTMDBQGGE3A1" },
-    { messanger = "https://m.me/andriisudak" }
+    { email = "mailto:contact@andrii-sudak.com" }
   ]
 
 [article]

@@ -32,7 +32,3 @@ The original logo was modified for use on this website. The changes include conv
 *   **Original Icon Source:** [Meta Brand Resources - Messenger Icon](https://www.meta.com/brand/resources/facebook/messenger-icon/)
 *   **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
 *   This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
-
-## Microsoft Office
-
-*   Microsoft® Office is a registered trademark of Microsoft Corporation.
