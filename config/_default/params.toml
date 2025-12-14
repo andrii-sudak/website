@@ -1,16 +1,22 @@
+#enableA11y = true
+autoSwitchAppearance = true
+enableSearch = false
+logo = "img/logo.svg"
+#replyByEmail = true
+#highlightCurrentMenuArea = true
+defaultFeaturedImage = "img/feature_default.png"
+disableImageZoom = true
+
 [homepage]
   layout = "profile"
   showRecent = true
   showRecentItems = 5
-  cardView = true
-
-disableImageZoom = true
-defaultFeaturedImage = "img/feature_default.png"
 
 [author]
   name = "Andrii Sudak"
   image = "img/author.jpg"
   headline = "Father of two | Open-minded person | DevOps Engineer | Poland, Krakow"
+#  email = "contact@andrii-sudak.com"
   links = [
     { simplex = "https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw" },
     { signal = "https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1" },
@@ -18,5 +24,11 @@ defaultFeaturedImage = "img/feature_default.png"
   ]
 
 [article]
-  showAuthorBottom = true
   showWordCount = false
+  showReadingTime = false
+  showDateUpdated = true
+  showAuthorBottom = true
+#  showBreadcrumbs = true
+
+[footer]
+  showThemeAttribution = false

@@ -1,4 +1,9 @@
 #[[main]]
+#  name = "Main"
+#  url = "/"
+#  weight = 5
+#
+#[[main]]
 #  name = "Posts"
 #  url = "/posts/"
 #  weight = 10
