@@ -15,5 +15,5 @@
 
 [[main]]
   name = "Book a Call"
-  url = "https://calendly.com/andrii-sudak/30min"
+  url = "https://app.cal.eu/andrii-sudak/"
   weight = 30
