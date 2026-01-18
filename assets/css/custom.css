@@ -86,7 +86,11 @@ a svg {
   fill: currentColor;
 }
 
-.author-photo, .author-box img, .rounded-full {
+.author-photo, .author-box img, .rounded-full, .thumbnail {
+  border-radius: 28% !important;
+}
+
+.thumbnail {
   border-radius: 28% !important;
 }
 

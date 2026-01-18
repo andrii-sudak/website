@@ -29,7 +29,7 @@
     {{/* Copyright notice */}}
     {{ if .Site.Params.footer.showCopyright | default true }}
       <p class="text-sm my-1 text-center text-neutral-500 dark:text-neutral-400">
-        &copy; {{ now.Format "2006" }} {{ .Site.Author.name | default (.Site.Language.Params.Author.name | default .Site.Title) | emojify | markdownify }}
+        &copy; 2025-{{ now.Format "2006" }} {{ .Site.Author.name | default (.Site.Language.Params.Author.name | default .Site.Title) | emojify | markdownify }}
       </p>
     {{ end }}
 
