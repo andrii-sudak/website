@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2025-12-12T23:42:00+02:00
+date: 2026-01-18T21:03:00+01:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -11,7 +11,7 @@ showDate: true
 
 
 {{< alert icon="circle-info" iconColor="#ffffff" textColor="#ffffff" >}}
-I'm available from 7:30 to 21:30 Central European Time (CET/CEST).
+I'm available from 8:00 to 22:00 Central European Time (CET/CEST).
 {{< /alert >}}
 
 ####
@@ -33,6 +33,8 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 {{< /alert >}}
 
 ####
+
+{{< icon "booking" >}} [Booking](https://app.cal.eu/andrii-sudak/) – the best entry point with always up-to-date information.
 
 1. {{< icon "simplex" >}} [SimpleX](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
 2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
