@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-01-18T21:03:00+01:00
+date: 2026-01-22T19:15:00+01:00
 draft: false
 showAuthor: false
 showReadingTime: false
