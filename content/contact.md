@@ -34,7 +34,7 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 
 ####
 
-{{< icon "booking" >}} [Booking](https://app.cal.eu/andrii-sudak/) – the best entry point with always up-to-date information.
+{{< icon "booking" >}} [Booking](https://andrii-sudak.com/book) – the best entry point with always up-to-date information.
 
 1. {{< icon "simplex" >}} [SimpleX](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
 2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
