@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  HUGO_VERSION: 0.145.0
+  HUGO_VERSION: 0.157.0
   HUGO_ENV: production
   GO_VERSION: 1.24.3
 

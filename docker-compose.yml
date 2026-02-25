@@ -1,0 +1,17 @@
+services:
+  hugo:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "1313:1313"
+    volumes:
+      - .:/src:cached
+      - hugo-mod-cache:/go/pkg/mod # Cache for Go modules (speeds up startup)
+    environment:
+      - HUGO_ENVIRONMENT=development
+    restart: unless-stopped
+    command: [ "hugo", "server", "--bind=0.0.0.0", "--buildDrafts", "--buildFuture", "--disableFastRender", "--gc", "--cleanDestinationDir", "--logLevel", "info" ]
+
+volumes:
+  hugo-mod-cache:

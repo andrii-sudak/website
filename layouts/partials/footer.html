@@ -1,75 +1,78 @@
 <footer id="site-footer" class="py-10 print:hidden">
   {{/* Footer menu */}}
   {{ if .Site.Params.footer.showMenu | default true }}
-    {{ if .Site.Menus.footer }}
-      <nav class="flex justify-center pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
-        <ul class="flex flex-col list-none sm:flex-row">
-          {{ range .Site.Menus.footer }}
-            <li
-              class="flex justify-center mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
-              <a
-                class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center"
-                href="{{ .URL }}"
-                title="{{ .Title }}">
-                {{ if .Pre }}
-                  <span {{ if and .Pre .Name }}class="mr-1"{{ end }}>
-                    {{ partial "icon.html" .Pre }}
-                  </span>
-                {{ end }}
-                {{ .Name | markdownify }}
-              </a>
-            </li>
+  {{ if .Site.Menus.footer }}
+  <nav class="flex justify-center pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+    <ul class="flex flex-col list-none sm:flex-row">
+      {{ range .Site.Menus.footer }}
+      <li class="flex justify-center mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+        <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center"
+          href="{{ .URL }}" title="{{ .Title }}">
+          {{ if .Pre }}
+          <span {{ if and .Pre .Name }}class="mr-1" {{ end }}>
+            {{ partial "icon.html" .Pre }}
+          </span>
           {{ end }}
-        </ul>
-      </nav>
-    {{ end }}
+          {{ .Name | markdownify }}
+        </a>
+      </li>
+      {{ end }}
+    </ul>
+  </nav>
+  {{ end }}
   {{ end }}
 
   <div class="flex flex-col items-center justify-center">
     {{/* Copyright notice */}}
     {{ if .Site.Params.footer.showCopyright | default true }}
-      <p class="text-sm my-1 text-center text-neutral-500 dark:text-neutral-400">
-        &copy; 2025-{{ now.Format "2006" }} {{ .Site.Author.name | default (.Site.Language.Params.Author.name | default .Site.Title) | emojify | markdownify }}
-      </p>
+    <p class="text-sm my-1 text-center text-neutral-500 dark:text-neutral-400">
+      &copy; 2025-{{ now.Format "2006" }} {{ .Site.Params.author.name | default (.Site.Language.Params.author.name |
+      default .Site.Title) | emojify | markdownify }}
+    </p>
     {{ end }}
 
     {{/* License badge */}}
     <div class="text-sm my-1 flex items-center text-neutral-500 dark:text-neutral-400">
-      <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer license" aria-label="Content licensed under CC BY-NC-ND 4.0" title="Content: CC BY-NC-ND 4.0" class="flex items-center hover:underline">
-        <img src="{{ (resources.Get "img/by-nc-nd.svg").RelPermalink }}" alt="Creative Commons BY-NC-ND License" class="inline-block h-4 w-auto"/>
+      <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer license"
+        aria-label="Content licensed under CC BY-NC-ND 4.0" title="Content: CC BY-NC-ND 4.0"
+        class="flex items-center hover:underline">
+        {{ with resources.Get "img/by-nc-nd.svg" }}
+        <img src="{{ .RelPermalink }}" alt="Creative Commons BY-NC-ND License" class="inline-block h-4 w-auto" />
+        {{ end }}
       </a>
     </div>
 
     {{/* Theme attribution (configurable) */}}
     {{ if .Site.Params.footer.showThemeAttribution | default true }}
-      <p class="text-xs my-1 text-neutral-500 dark:text-neutral-400">
-        {{ $hugo := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
-          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>`
-        }}
-        {{ $blowfish := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
-          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>`
-        }}
-        {{ i18n "footer.powered_by" (dict "Hugo" $hugo "Theme" $blowfish) | safeHTML }}
-      </p>
+    <p class="text-xs my-1 text-neutral-500 dark:text-neutral-400">
+      {{ $hugo := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>`
+      }}
+      {{ $blowfish := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>`
+      }}
+      {{ i18n "footer.powered_by" (dict "Hugo" $hugo "Theme" $blowfish) | safeHTML }}
+    </p>
     {{ end }}
   </div>
 
   <script>
-    {{ if false }}
+    { { if false } }
     mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
       margin: 24,
       background: 'rgba(0,0,0,0.5)',
       scrollOffset: 0,
     })
-    {{ end }}
+    { { end } }
   </script>
   {{ $jsProcess := resources.Get "js/process.js" }}
-  {{ $jsProcess = $jsProcess | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
-  <script
-    type="text/javascript"
-    src="{{ $jsProcess.RelPermalink }}"
+  {{ if $jsProcess }}
+  {{ $jsProcess = $jsProcess | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default
+  "sha512") }}
+  <script type="text/javascript" src="{{ $jsProcess.RelPermalink }}"
     integrity="{{ $jsProcess.Data.Integrity }}"></script>
+  {{ end }}
   {{ if templates.Exists "partials/extend-footer.html" }}
-    {{ partialCached "extend-footer.html" . }}
+  {{ partialCached "extend-footer.html" . }}
   {{ end }}
 </footer>

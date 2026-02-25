@@ -1,0 +1,29 @@
+FROM golang:1.24-bookworm
+
+# Install required dependencies: git for Go modules, nodejs/npm for PostCSS (often needed by themes), g++, etc.
+RUN apt-get update && apt-get install -y git tzdata g++ npm curl bash build-essential && rm -rf /var/lib/apt/lists/*
+
+# Download and install the latest extended version of Hugo for Linux
+RUN ARCH="$(uname -m)" && \
+  if [ "$ARCH" = "x86_64" ]; then \
+  HUGO_ARCH="amd64"; \
+  elif [ "$ARCH" = "aarch64" ]; then \
+  HUGO_ARCH="arm64"; \
+  else \
+  echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi && \
+  echo "Fetching latest Hugo version..." && \
+  LATEST_TAG=$(curl -s https://api.github.com/repos/gohugoio/hugo/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | tr -d '\r\n') && \
+  LATEST_VERSION=$(echo ${LATEST_TAG} | sed 's/^v//') && \
+  HUGO_URL="https://github.com/gohugoio/hugo/releases/download/${LATEST_TAG}/hugo_extended_${LATEST_VERSION}_linux-${HUGO_ARCH}.tar.gz" && \
+  echo "Downloading ${HUGO_URL}" && \
+  curl -L "${HUGO_URL}" | tar -xz -C /usr/local/bin hugo && \
+  chmod +x /usr/local/bin/hugo && \
+  hugo version
+
+WORKDIR /src
+
+EXPOSE 1313
+
+# Start the dev server, binding to all interfaces to make it accessible outside the container
+CMD ["hugo", "server", "--bind=0.0.0.0", "--buildDrafts", "--buildFuture", "--disableFastRender", "--gc", "--logLevel", "info"]
