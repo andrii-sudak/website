@@ -8,7 +8,11 @@ Thumbs.db
 .env
 
 public/
+public_test/
 resources/
 .hugo_build.lock
 hugo_stats.json
 
+# Hugo caches
+.hugo_cache/
+/tmp/hugo_cache/
