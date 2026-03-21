@@ -1,7 +1,7 @@
 <article
   class="
     h-full
-   flex flex-col items-center justify-center text-center">
+    flex flex-col items-center justify-center text-center">
   <header class="relative px-1 py-1 flex flex-col items-center mb-3">
     {{ with .Site.Params.Author.image }}
       {{ $authorImage := "" }}
@@ -13,7 +13,7 @@
       {{ if $authorImage }}
         {{ $final := $authorImage }}
         {{ if not $.Site.Params.disableImageOptimization }}
-          {{ $final = $authorImage.Fill (print "288x288 q" ( $.Site.Params.Author.imagequality | default "96" )) }}
+          {{ $final = $authorImage.Resize (print "288x288 q" ( $.Site.Params.Author.imagequality | default "96" )) }}
         {{ end }}
         <img
           class="mb-2 h-36 w-36 author-photo"
