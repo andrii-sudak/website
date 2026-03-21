@@ -1,4 +1,4 @@
-/* Typography Implementation - Variant A (System Fonts first, Google Fonts for Android/Linux) */
+/* Typography Implementation - System Fonts first, Google Fonts for fallback */
 :root {
   font-family: 'Verdana Pro', 'Verdana', 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
@@ -50,43 +50,7 @@ code, pre, kbd, samp, .mono {
   --color-secondary-900: 38, 139, 210;  /* Solarized Blue */
 }
 
-html.dark :root {
-  /* Neutral Colors (Dark Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
-  --color-neutral-50: 7, 54, 66;        /* Solarized base02 - lightest background elements in dark */
-  --color-neutral-100: 0, 43, 54;       /* Solarized base03 - main page background */
-  --color-neutral-200: 88, 110, 117;   /* Solarized base01 - subtle text/borders */
-  --color-neutral-300: 101, 123, 131;  /* Solarized base00 - secondary text */
-  --color-neutral-400: 131, 148, 150;  /* Solarized base0 - main text */
-  --color-neutral-500: 147, 161, 161;  /* Solarized base1 - brighter text / headings */
-  --color-neutral-600: 238, 232, 213;  /* Solarized base2 - very light (less used in dark) */
-  --color-neutral-700: 253, 246, 227;   /* Solarized base3 - lightest (less used in dark) */
-  --color-neutral-800: 253, 246, 227;   /* Solarized base3 - repeat for lightest shades */
-  --color-neutral-900: 253, 246, 227;   /* Solarized base3 - repeat for lightest shades */
 
-  /* Primary Colors (Dark Theme) - Solarized Green (often same as light for accent consistency) */
-  --color-primary-50: 133, 153, 0;
-  --color-primary-100: 133, 153, 0;
-  --color-primary-200: 133, 153, 0;
-  --color-primary-300: 133, 153, 0;
-  --color-primary-400: 133, 153, 0;
-  --color-primary-500: 133, 153, 0;   /* Solarized Green #859900 */
-  --color-primary-600: 133, 153, 0;
-  --color-primary-700: 133, 153, 0;
-  --color-primary-800: 133, 153, 0;
-  --color-primary-900: 133, 153, 0;
-
-  /* Secondary Colors (Dark Theme) - Solarized Blue (often same as light) */
-  --color-secondary-50: 38, 139, 210;
-  --color-secondary-100: 38, 139, 210;
-  --color-secondary-200: 38, 139, 210;
-  --color-secondary-300: 38, 139, 210;
-  --color-secondary-400: 38, 139, 210;
-  --color-secondary-500: 38, 139, 210;  /* Solarized Blue #268bd2 */
-  --color-secondary-600: 38, 139, 210;
-  --color-secondary-700: 38, 139, 210;
-  --color-secondary-800: 38, 139, 210;
-  --color-secondary-900: 38, 139, 210;
-}
 
 a, a:visited {
   color: rgb(var(--color-neutral-300));
@@ -101,15 +65,139 @@ a svg {
 }
 
 .author-photo, .author-box img, .rounded-full, .thumbnail {
-  border-radius: 28% !important;
-}
-
-.thumbnail {
-  border-radius: 28% !important;
+  border-radius: 12px !important; /* Fixed radius for better flat-to-rounded ratio */
 }
 
 header a > svg {
   height: 2rem;
-  border-radius: 28%;
+  border-radius: 12px;
   margin-left: 10px;
+}
+
+/* Consistent 12px Rounding for all UI blocks and navigation */
+.rounded, .rounded-sm, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl,
+nav a.bf-icon-color-hover, button#appearance-switcher, 
+.article-content .flex.rounded-md, .alert, .badge {
+  border-radius: 12px !important;
+}
+
+/* Fix Alert/Note Text Contrast (High priority for readability) */
+.alert, .alert span, .alert p, .alert strong, .alert-content, .alert-content div,
+[class*="bg-primary-"] span, [class*="bg-primary-"] strong {
+  color: rgb(var(--color-neutral-50)) !important; /* Cream text (Solarized base3) for high contrast */
+}
+
+html.dark [class*="bg-primary-900"] span, html.dark [class*="bg-primary-900"] strong {
+  color: rgb(var(--color-neutral-50)) !important; /* Force legibility in dark mode on olive bg */
+}
+
+/* Restoration: Using the natural image framing as per user request */
+.author-photo, .author-photo img, .author-box img, .author img {
+  object-fit: cover !important;
+  object-position: initial !important; /* Reverting to default framing of the original assets/img/author.jpg */
+}
+
+/* --------------------------------------------------------------------------
+   Website Navigation Styling
+   -------------------------------------------------------------------------- */
+nav a.bf-icon-color-hover, button#appearance-switcher, label[for="mobile-menu-toggle"], #appearance-switcher-mobile {
+  background-color: rgb(var(--color-primary-500));
+  color: rgb(var(--color-neutral-50)) !important; /* Cream text (high contrast) */
+  border: none;
+  padding: 6px 14px; /* Increased padding slightly to compensate for lost border width */
+  border-radius: 12px !important; /* Enforce 12px rounding on all viewports */
+  font-weight: bold;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1); /* Soft shadow like cards */
+  transition: all 0.2s ease;
+  margin: 0 4px;
+}
+
+nav a.bf-icon-color-hover:hover, button#appearance-switcher:hover, label[for="mobile-menu-toggle"]:hover, #appearance-switcher-mobile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
+nav a.bf-icon-color-hover:active, button#appearance-switcher:active, label[for="mobile-menu-toggle"]:active, #appearance-switcher-mobile:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+html.dark nav a.bf-icon-color-hover, html.dark button#appearance-switcher, html.dark label[for="mobile-menu-toggle"], html.dark #appearance-switcher-mobile {
+  background-color: rgb(var(--color-neutral-900)); /* Extremely dark background */
+  color: rgb(var(--color-primary-500)) !important; /* Neon green text */
+  border: none;     /* Removed dark/neon border */
+  box-shadow: 5px 5px 20px 1px rgba(0, 0, 0, 0.3); /* Match card thumbnail shadow */
+}
+
+html.dark nav a.bf-icon-color-hover:hover, html.dark button#appearance-switcher:hover, html.dark label[for="mobile-menu-toggle"]:hover, html.dark #appearance-switcher-mobile:hover {
+  box-shadow: 8px 8px 25px 2px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+html.dark nav a.bf-icon-color-hover:active, html.dark button#appearance-switcher:active, html.dark label[for="mobile-menu-toggle"]:active, html.dark #appearance-switcher-mobile:active {
+  box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+}
+
+/* Scroll to top button styling consistency */
+#scroll-to-top, a[aria-label="Scroll to top"] {
+  background-color: transparent !important;
+  color: rgb(var(--color-neutral-50)) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  width: auto !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Container for scroll-to-top should have the actual style */
+#scroll-to-top {
+  background-color: rgb(var(--color-primary-500)) !important;
+  box-shadow: 5px 5px 20px 1px rgba(0, 0, 0, 0.3) !important;
+  padding: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html.dark #scroll-to-top, html.dark a[aria-label="Scroll to top"] {
+  background-color: rgb(var(--color-neutral-900)) !important;
+  color: rgb(var(--color-primary-500)) !important;
+  box-shadow: 5px 5px 20px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+#scroll-to-top:hover, a[aria-label="Scroll to top"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 8px 8px 25px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Background Abstraction for Mobile and Desktop */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background-color: rgb(var(--color-primary-500)); 
+  opacity: 0.15;
+  pointer-events: none;
+  -webkit-mask-image: url('/img/tech-bg.svg');
+  mask-image: url('/img/tech-bg.svg');
+  -webkit-mask-size: 150px;
+  mask-size: 150px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+
+html.dark body::before {
+  opacity: 0.05;
+}
+
+@media (max-width: 768px) {
+  body::before {
+    -webkit-mask-size: 100px;
+    mask-size: 100px;
+    opacity: 0.1; 
+  }
 }

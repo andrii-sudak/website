@@ -9,6 +9,11 @@
 #  weight = 10
 
 [[main]]
+  name = "Home"
+  url = "/"
+  weight = 10
+
+[[main]]
   name = "Contact"
   url = "/contact/"
   weight = 20
@@ -17,3 +22,4 @@
   name = "Schedule"
   url = "https://andrii-sudak.com/schedule"
   weight = 30
+
