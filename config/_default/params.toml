@@ -6,6 +6,8 @@ logo = "img/logo.svg"
 #highlightCurrentMenuArea = true
 defaultFeaturedImage = "img/feature_default.png"
 disableImageZoom = true
+enableFontPreload = true
+
 
 [homepage]
   layout = "profile"

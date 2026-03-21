@@ -25,10 +25,15 @@ The SimpleX Chat icon used on this site is based on the original logos provided 
 
 The original logo was modified for use on this website. The changes include converting the multi-color design to a **single-color (monochromatic)** version to match the website's theme and allow for dynamic color changes (e.g., on hover).
 
-## Messenger Logo
+* **Original Icon Source:** [Meta Brand Resources - Messenger Icon](https://www.meta.com/brand/resources/facebook/messenger-icon/)
+* **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
+* This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
 
-*   **Asset File Path in this Repository:** `/assets/icons/messanger.svg`
-*   **Description:** This icon is based on the official Messenger logo.
-*   **Original Icon Source:** [Meta Brand Resources - Messenger Icon](https://www.meta.com/brand/resources/facebook/messenger-icon/)
-*   **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
-*   This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
+
+## Typography
+
+* **System Fonts:** Verdana (Microsoft) and Monaco (Apple) are used as primary system fonts when available on the user's device.
+* **Google Fonts (Backups):**
+  * **Inter:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
+  * **Inconsolata:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
+* **License Compliance:** No font files are hosted in this repository. All proprietary fonts are referenced as system-local resources.

@@ -1,3 +1,17 @@
+/* Typography Implementation - Variant A (System Fonts first, Google Fonts for Android/Linux) */
+:root {
+  font-family: 'Verdana Pro', 'Verdana', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  font-family: 'Verdana Pro', 'Verdana', 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 0.95rem; /* Optical scaling compensation for Verdana/Inter */
+}
+
+code, pre, kbd, samp, .mono {
+  font-family: 'Monaco', 'Inconsolata', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
 :root {
   --color-neutral: 253, 246, 227;      /* Neutral Colors (Light Theme) - Solarized base03-base3 mapped to Blowfish neutral shades */
   --color-neutral-50: 253, 246, 227;   /* Solarized base3 - lightest background */
