@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-01-22T19:47:00+01:00
+date: 2026-03-01T21:28:00+02:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -36,11 +36,10 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 
 {{< icon "schedule" >}} [Schedule](https://andrii-sudak.com/schedule) – the best entry point with always up-to-date information.
 
-1. {{< icon "simplex" >}} [SimpleX](https://smp18.simplex.im/a#ftV-6nbHlK8TwrWlSYVq7FsjuTS-8O7IpNgrXfjuPuw)
-2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
+1. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
+2. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
 3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
-5. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
-6. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
+4. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
 ## Follow me:
 
@@ -54,10 +53,10 @@ I don't use these services for messaging. Please use the services listed above.
 All of my git commits are signed with my PGP key.
 {{< /alert >}}
 
+*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak)
+*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak)
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak)
 *   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak)
-*   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – under development
-*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) – write if it's about work
-*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak)
 *   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak)
+*   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – under development
 *   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) – GitHub mirror
