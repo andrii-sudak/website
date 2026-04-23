@@ -1,5 +1,6 @@
 #enableA11y = true
 autoSwitchAppearance = true
+isoCode = "en"
 enableSearch = false
 logo = "img/logo.svg"
 #replyByEmail = true
