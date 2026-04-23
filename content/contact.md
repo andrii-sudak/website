@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-03-01T21:28:00+02:00
+date: 2026-04-23T17:46:00+02:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -36,10 +36,11 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 
 {{< icon "schedule" >}} [Schedule](https://andrii-sudak.com/schedule) – the best entry point with always up-to-date information.
 
-1. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
-2. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
-3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
-4. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
+1. {{< icon "threema" >}} [Threema](https://threema.id/DNZHSZRH)
+2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
+3. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
+4. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
+5. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
 ## Follow me:
 
@@ -58,5 +59,5 @@ All of my git commits are signed with my PGP key.
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak)
 *   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak)
 *   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak)
-*   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – under development
+*   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
 *   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) – GitHub mirror
