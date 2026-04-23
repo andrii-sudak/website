@@ -1,9 +1,11 @@
 ---
 name: Deploy Hugo Site to GitHub Pages
+# GitHub Actions is currently disabled in favor of Codeberg Pages CI
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
 
 env:
   HUGO_VERSION: 0.157.0
