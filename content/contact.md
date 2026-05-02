@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-04-23T17:46:00+02:00
+date: 2026-05-03T00:20:00+02:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -55,9 +55,10 @@ All of my git commits are signed with my PGP key.
 {{< /alert >}}
 
 *   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak)
-*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak)
+*   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak)
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak)
-*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak)
+*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak)
 *   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak)
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
-*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) – GitHub mirror
+*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror
+*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Mirror
