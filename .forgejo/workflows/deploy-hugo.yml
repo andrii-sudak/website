@@ -39,4 +39,4 @@ jobs:
           git checkout -b pages
           git add .
           git commit -m "Deploy Hugo site from main"
-          git push --force "https://${{ forge.repository_owner }}:${{ forge.token }}@codeberg.org/${{ forge.repository }}.git" pages
+          git push --force "https://${{ github.repository_owner }}:${{ github.token }}@codeberg.org/${{ github.repository }}.git" pages
