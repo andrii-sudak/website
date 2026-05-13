@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-05-03T00:20:00+02:00
+date: 2026-05-12T00:23:00+02:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -11,7 +11,7 @@ showDate: true
 
 
 {{< alert icon="circle-info" iconColor="#ffffff" textColor="#ffffff" >}}
-I'm available from 8:00 to 22:00 Central European Time (CET/CEST).
+I'm available from 8:00 to 22:00 Central European Time (CET/CEST)
 {{< /alert >}}
 
 ####
@@ -23,13 +23,13 @@ I value privacy – both mine and yours. Services are arranged by priority.
 ####
 
 {{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-Confidential files are sent encrypted (AES-256) and password-protected as ZIP or encrypted OpenDocument formats. Please ensure any sensitive data you send to me is also encrypted.
+Confidential files are encrypted with AES-256 and protected with a password, either as ZIP archives or encrypted OpenDocument files. Please ensure that any sensitive data you send me is encrypted in the same way.
 {{< /alert >}}
 
 ####
 
 {{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-All my emails are signed with my S/MIME certificate.  They will be encrypted using S/MIME or PGP if your public key is provided.
+All my emails are signed with my PGP key. They can also be encrypted with PGP if you provide your public key.
 {{< /alert >}}
 
 ####
@@ -38,8 +38,8 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 
 1. {{< icon "threema" >}} [Threema](https://threema.id/DNZHSZRH)
 2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
-3. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
-4. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [GnuPG](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D) – {{< icon "lock" >}} [S/MIME](/certs/contact-andrii-sudak-com-public.cer)
+3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "protonmail" >}} Powered by Proton Mail
+4. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
 5. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
 ## Follow me:
@@ -48,17 +48,16 @@ All my emails are signed with my S/MIME certificate.  They will be encrypted usi
 I don't use these services for messaging. Please use the services listed above.
 {{< /alert >}}
 
-####
-
-{{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-All of my git commits are signed with my PGP key.
-{{< /alert >}}
-
-*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak)
-*   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak)
-*   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak)
-*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak)
-*   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak)
+*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) - Work-related communication and business
+*   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak) – Primary Git
+*   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak) – Casual blog
+*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) - Work-related communication and business
+*   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) - Work-related communication and business
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
-*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror
-*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Mirror
+*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror Git
+*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Mirror Git
+
+## Public Keys:
+
+*   {{< icon "gnupg" >}} [General PGP Key](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D)
+*   {{< icon "protonmail" >}} [Email PGP Key](/keys/contact-andrii-sudak-com-proton-key.asc)

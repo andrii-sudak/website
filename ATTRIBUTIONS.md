@@ -21,15 +21,15 @@ This project uses assets from other sources. We are grateful to their creators f
 * **License for Original and Modified Version:** This modified icon, as well as the original, is licensed under the **GNU Lesser General Public License v2.1 or later (LGPL-2.1-or-later)**.
 * **Source Code for Modified Icon:** The source code for this modified icon is the SVG file located at `/assets/icons/gnupg.svg` in this repository.
 * **LGPL v2.1 License Text:**
-    * The full text of the LGPL v2.1 is available online at: [https://www.gnu.org/licenses/lgpl-2.1.html](https://www.gnu.org/licenses/lgpl-2.1.html)
-    * A copy of `LGPL-2.1.txt` should also be included in this repository (e.g., in a `LICENSES/` directory).
+  * The full text of the LGPL v2.1 is available online at: [https://www.gnu.org/licenses/lgpl-2.1.html](https://www.gnu.org/licenses/lgpl-2.1.html)
+  * A copy of `LGPL-2.1.txt` should also be included in this repository (e.g., in a `LICENSES/` directory).
 
 ## SimpleX Chat Logo
 
 The SimpleX Chat icon used on this site is based on the original logos provided by the SimpleX Chat project.
 
-- **Source:** [SimpleX Chat Official Media Logos](https://github.com/simplex-chat/simplex-chat/tree/stable/media-logos)
-- **License:** The original assets are part of a project under the [AGPL-3.0 License](https://github.com/simplex-chat/simplex-chat/blob/stable/LICENSE).
+* **Source:** [SimpleX Chat Official Media Logos](https://github.com/simplex-chat/simplex-chat/tree/stable/media-logos)
+* **License:** The original assets are part of a project under the [AGPL-3.0 License](https://github.com/simplex-chat/simplex-chat/blob/stable/LICENSE).
 
 ### Modifications
 
@@ -39,7 +39,6 @@ The original logo was modified for use on this website. The changes include conv
 * **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
 * This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
 
-
 ## Typography
 
 * **System Fonts:** Verdana (Microsoft) and Monaco (Apple) are used as primary system fonts when available on the user's device.
@@ -47,3 +46,9 @@ The original logo was modified for use on this website. The changes include conv
   * **Inter:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
   * **Inconsolata:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
 * **License Compliance:** No font files are hosted in this repository. All proprietary fonts are referenced as system-local resources.
+
+## Proton Mail Logo
+
+* **Icon Source:** The Proton icon used on this site is sourced from [Simple Icons](https://simpleicons.org/), which provides SVG icons for popular brands.
+* **License:** Simple Icons are released under the [CC0 1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/).
+* **Trademarks:** Proton, Proton Mail, and the Proton logo are registered trademarks of Proton AG. The use of the logo here is for reference to the service and does not imply affiliation, endorsement, or sponsorship by Proton AG.
