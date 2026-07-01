@@ -28,17 +28,11 @@ Confidential files are encrypted with AES-256 and protected with a password, eit
 
 ####
 
-{{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-All my emails are signed with my PGP key. They can also be encrypted with PGP if you provide your public key.
-{{< /alert >}}
-
-####
-
 {{< icon "schedule" >}} [Schedule](https://andrii-sudak.com/schedule) – the best entry point with always up-to-date information.
 
 1. {{< icon "threema" >}} [Threema](https://threema.id/DNZHSZRH)
 2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
-3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "protonmail" >}} Powered by Proton Mail
+3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [PGP Key](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D)
 4. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
 5. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
@@ -56,8 +50,3 @@ I don't use these services for messaging. Please use the services listed above.
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
 *   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror Git
 *   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Mirror Git
-
-## Public Keys:
-
-*   {{< icon "gnupg" >}} [General PGP Key](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D)
-*   {{< icon "protonmail" >}} [Email PGP Key](/keys/contact-andrii-sudak-com-proton-key.asc)

@@ -46,9 +46,3 @@ The original logo was modified for use on this website. The changes include conv
   * **Inter:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
   * **Inconsolata:** Licensed under the [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL).
 * **License Compliance:** No font files are hosted in this repository. All proprietary fonts are referenced as system-local resources.
-
-## Proton Mail Logo
-
-* **Icon Source:** The Proton icon used on this site is sourced from [Simple Icons](https://simpleicons.org/), which provides SVG icons for popular brands.
-* **License:** Simple Icons are released under the [CC0 1.0 Universal License](https://creativecommons.org/publicdomain/zero/1.0/).
-* **Trademarks:** Proton, Proton Mail, and the Proton logo are registered trademarks of Proton AG. The use of the logo here is for reference to the service and does not imply affiliation, endorsement, or sponsorship by Proton AG.
