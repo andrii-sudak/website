@@ -1,5 +1,5 @@
 [en]
-  languageName = "English"
-  languageCode = "en-us"
+  label = "English"
+  locale = "en-us"
   contentDir = "content"
   weight = 1
