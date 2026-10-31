@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-11-01T00:01:00+01:00
+date: 2026-11-01T00:08:00+01:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -9,27 +9,14 @@ showDate: true
 
 ## Get in touch with me:
 
-
 {{< alert icon="circle-info" iconColor="#ffffff" textColor="#ffffff" >}}
-I'm available from 8:00 to 22:00 Central European Time (CET/CEST)
+I'm available **8:00–22:00 CET/CEST**. Channels are listed by priority – top messengers get the fastest reply, while **every email is guaranteed a response** (sometimes with a slight delay).
 {{< /alert >}}
 
 ####
 
 {{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-I value privacy – both mine and yours. Services are arranged by priority.
-{{< /alert >}}
-
-####
-
-{{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-When emailing me, please use PGP encryption if possible — I keep my cryptographic keys exclusively on hardware security keys.
-{{< /alert >}}
-
-####
-
-{{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-I share sensitive files as password-protected archives or documents and send the password via a separate channel (e.g., file by email, password by SMS or messenger). Please do the same when sending confidential files to me.
+I value both your privacy and mine. Feel free to use **PGP** for emails (my keys are stored strictly on hardware security keys). For confidential files, I send password-protected archives and share the password via a separate channel (e.g., SMS or messenger) – please do the same when sending sensitive data to me.
 {{< /alert >}}
 
 ####
@@ -49,11 +36,11 @@ I share sensitive files as password-protected archives or documents and send the
 I don't use these services for messaging. Please use the services listed above.
 {{< /alert >}}
 
-*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) - Work-related communication and business
+*   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) – Work-related communication and business
 *   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak) – Mirror Git
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak) – Casual blog
-*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) - Work-related communication and business
-*   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) - Work-related communication and business
+*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) – Work-related communication and business
+*   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) – Work-related communication and business
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
-*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror Git
+*   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) – Mirror Git
 *   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Primary Git
