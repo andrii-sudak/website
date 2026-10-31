@@ -86,9 +86,9 @@ nav a.bf-icon-color-hover, button#appearance-switcher,
   border-radius: 12px !important;
 }
 
-/* Fix excessive gap between page header/date and first element in article content */
-#single_header > div {
-  margin-bottom: 0.75rem !important;
+/* Consistent spacing between page header (h1) and first element in article content */
+#single_header {
+  margin-bottom: 1.5rem !important;
 }
 
 .article-content > :first-child {
