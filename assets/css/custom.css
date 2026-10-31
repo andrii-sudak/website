@@ -1,4 +1,9 @@
 /* Typography Implementation - System Fonts first, Google Fonts for fallback */
+html {
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
+}
+
 :root {
   font-family: 'Verdana Pro', 'Verdana', 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
