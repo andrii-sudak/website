@@ -3,3 +3,6 @@
   locale = "en-us"
   contentDir = "content"
   weight = 1
+
+[en.params]
+  dateFormat = "2006-01-02"

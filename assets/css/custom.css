@@ -86,6 +86,15 @@ nav a.bf-icon-color-hover, button#appearance-switcher,
   border-radius: 12px !important;
 }
 
+/* Fix excessive gap between page header/date and first element in article content */
+#single_header > div {
+  margin-bottom: 0.75rem !important;
+}
+
+.article-content > :first-child {
+  margin-top: 0 !important;
+}
+
 /* Fix Alert/Note Text Contrast (High priority for readability) */
 .alert, .alert span, .alert p, .alert strong, .alert-content, .alert-content div,
 [class*="bg-primary-"] span, [class*="bg-primary-"] strong {
