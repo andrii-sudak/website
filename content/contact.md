@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-05-12T00:23:00+02:00
+date: 2026-11-01T00:01:00+01:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -23,18 +23,25 @@ I value privacy – both mine and yours. Services are arranged by priority.
 ####
 
 {{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
-Confidential files are encrypted with AES-256 and protected with a password, either as ZIP archives or encrypted OpenDocument files. Please ensure that any sensitive data you send me is encrypted in the same way.
+When emailing me, please use PGP encryption if possible — I keep my cryptographic keys exclusively on hardware security keys.
+{{< /alert >}}
+
+####
+
+{{< alert icon="shield" iconColor="#ffffff" textColor="#ffffff" >}}
+I share sensitive files as password-protected archives or documents and send the password via a separate channel (e.g., file by email, password by SMS or messenger). Please do the same when sending confidential files to me.
 {{< /alert >}}
 
 ####
 
 {{< icon "schedule" >}} [Schedule](https://andrii-sudak.com/schedule) – the best entry point with always up-to-date information.
 
-1. {{< icon "threema" >}} [Threema](https://threema.id/DNZHSZRH)
-2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4IYx89eTuJLiJsbzTt7Oba1)
+1. {{< icon "simplex" >}} [SimpleX](https://simplex.chat/contact#/?v=2-7&smp=smp%3A%2F%2FPtsqghzQKU83kYTlQ1VKg996dW4Cw4x_bvpKmiv8uns%3D%40smp18.simplex.im%2FQwHLSYav2vXh8xfmRt-XywrQtUJk5MIe%23%2F%3Fv%3D1-3%26dh%3DMCowBQYDK2VuAyEAiyM-1NDF29x8hrmNc3Uj5ZdokaXO91J-uD_I9ZkfHT8%253D%26srv%3Dlyqpnwbs2zqfr45jqkncwpywpbtq7jrhxnib5qddtr6npjyezuwd3nqd.onion)
+2. {{< icon "signal" >}} [Signal](https://signal.me/#eu/BGNUrD5nDWs2ArKIOWz1mMZsXSaivLDBEkoQ1C6JO4LuuPSIDQpJ_ayI8W-826fX)
 3. {{< icon "email" >}} [Email](mailto:contact@andrii-sudak.com) – {{< icon "gnupg" >}} [PGP Key](https://keys.openpgp.org/vks/v1/by-fingerprint/A88C4CE4DA150F2F4E9A53D5378609B5643F5A4D)
-4. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/qr/HGVTMDBQGGE3A1)
-5. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
+4. {{< icon "threema" >}} [Threema](https://threema.id/DNZHSZRH)
+5. {{< icon "whatsapp" >}} [WhatsApp](https://wa.me/message/CMO2M6JSZKTEC1)
+6. {{< icon "messanger" >}} [Messanger](https://m.me/andriisudak)
 
 ## Follow me:
 
@@ -43,10 +50,10 @@ I don't use these services for messaging. Please use the services listed above.
 {{< /alert >}}
 
 *   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) - Work-related communication and business
-*   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak) – Primary Git
+*   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak) – Mirror Git
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak) – Casual blog
 *   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) - Work-related communication and business
 *   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) - Work-related communication and business
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
 *   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) –  Mirror Git
-*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Mirror Git
+*   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Primary Git
