@@ -1,3 +1,8 @@
 baseURL = 'https://andrii-sudak.com'
 title = "Andrii Sudak's Website"
 defaultContentLanguage = "en"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

@@ -1,0 +1,191 @@
+{{- /*
+  Hugo Content Adapter for Mastodon Syndication
+  ---------------------------------------------
+  Dynamically generates native Hugo pages in /posts/ from:
+    1. Optional local archive at data/mastodon/archive.json (for account migrations/backups)
+    2. Live public Mastodon API configured under [params.mastodon] in params.toml
+
+  Uses the "mastodon-<id>" path namespace so it never conflicts with manual Markdown
+  posts in content/posts/ or additional feed adapters added in the future.
+*/ -}}
+
+{{- $instance := site.Params.mastodon.instance | default "https://infosec.exchange" | strings.TrimRight "/" -}}
+{{- $accountId := site.Params.mastodon.accountId | default "113526667200388301" -}}
+{{- $username := site.Params.mastodon.username | default "andrii_sudak" -}}
+{{- $host := replaceRE "^https?://" "" $instance -}}
+
+{{- $allStatuses := slice -}}
+{{- $seenIds := dict -}}
+
+{{- /* 1. Load from local archive (data/mastodon/archive.json) if present */ -}}
+{{- with hugo.Data.mastodon -}}
+  {{- with .archive -}}
+    {{- range . -}}
+      {{- $id := printf "%v" .id -}}
+      {{- if not (index $seenIds $id) -}}
+        {{- $seenIds = merge $seenIds (dict $id true) -}}
+        {{- $allStatuses = $allStatuses | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 2. Fetch live public statuses from Mastodon API (up to 5 pages x 40 items) */ -}}
+{{- $maxId := "" -}}
+{{- $keepFetching := true -}}
+{{- range seq 1 5 -}}
+  {{- if $keepFetching -}}
+    {{- $apiURL := printf "%s/api/v1/accounts/%s/statuses?exclude_replies=true&exclude_reblogs=true&limit=40" $instance $accountId -}}
+    {{- if ne $maxId "" -}}
+      {{- $apiURL = printf "%s&max_id=%s" $apiURL $maxId -}}
+    {{- end -}}
+    {{- with try (resources.GetRemote $apiURL) -}}
+      {{- with .Err -}}
+        {{- warnf "Mastodon content adapter: failed to fetch %s: %s" $apiURL . -}}
+        {{- $keepFetching = false -}}
+      {{- else with .Value -}}
+        {{- $pageStatuses := . | transform.Unmarshal -}}
+        {{- if gt (len $pageStatuses) 0 -}}
+          {{- range $pageStatuses -}}
+            {{- $id := printf "%v" .id -}}
+            {{- $maxId = $id -}}
+            {{- if not (index $seenIds $id) -}}
+              {{- $seenIds = merge $seenIds (dict $id true) -}}
+              {{- $allStatuses = $allStatuses | append . -}}
+            {{- end -}}
+          {{- end -}}
+          {{- if lt (len $pageStatuses) 40 -}}
+            {{- $keepFetching = false -}}
+          {{- end -}}
+        {{- else -}}
+          {{- $keepFetching = false -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 3. Filter to own root public posts (exclude self-replies and non-public statuses) */ -}}
+{{- $rootStatuses := slice -}}
+{{- $dateCounts := dict -}}
+{{- range $allStatuses -}}
+  {{- $isPublic := eq .visibility "public" -}}
+  {{- $isNotReblog := not .reblog -}}
+  {{- $isNotReply := not .in_reply_to_id -}}
+  {{- if and $isPublic $isNotReblog $isNotReply -}}
+    {{- $rootStatuses = $rootStatuses | append . -}}
+    {{- $createdAt := time.AsTime .created_at -}}
+    {{- $dayKey := $createdAt.Format "2006-01-02" -}}
+    {{- $currentCount := index $dateCounts $dayKey | default 0 -}}
+    {{- $dateCounts = merge $dateCounts (dict $dayKey (add $currentCount 1)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 4. Register each status as a native Hugo page */ -}}
+{{- range $status := $rootStatuses -}}
+  {{- $id := printf "%v" $status.id -}}
+  {{- $createdAt := time.AsTime $status.created_at -}}
+  {{- $lastmod := $createdAt -}}
+  {{- with $status.edited_at -}}
+    {{- $lastmod = time.AsTime . -}}
+  {{- end -}}
+
+  {{- $dayKey := $createdAt.Format "2006-01-02" -}}
+  {{- $title := $dayKey -}}
+  {{- if gt (index $dateCounts $dayKey | default 1) 1 -}}
+    {{- $title = $createdAt.Format "2006-01-02 · 15:04" -}}
+  {{- end -}}
+
+  {{- /* Extract hashtags into native Hugo tags */ -}}
+  {{- $tags := slice -}}
+  {{- range $status.tags -}}
+    {{- with .name -}}
+      {{- $tags = $tags | append . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* Build clean preview HTML and plain-text summary (stripping trailing hashtag-only paragraphs) */ -}}
+  {{- $summaryHTML := replaceRE `<p>(\s*<a[^>]*class="[^"]*hashtag[^"]*"[^>]*>#<span>[^<]+</span></a>\s*)+</p>\s*$` "" $status.content -}}
+  {{- $summaryText := $summaryHTML | plainify | htmlUnescape | strings.TrimSpace -}}
+  {{- if eq $summaryText "" -}}
+    {{- $summaryHTML = $status.content -}}
+    {{- $summaryText = $status.content | plainify | htmlUnescape | strings.TrimSpace -}}
+  {{- end -}}
+
+  {{- /* Build post HTML body + attached media + extract preview thumbnail if present */ -}}
+  {{- $bodyHTML := printf `<div class="mastodon-post-content">%s</div>` $status.content -}}
+  {{- $featureImageURL := "" -}}
+
+  {{- with $status.media_attachments -}}
+    {{- if gt (len .) 0 -}}
+      {{- $mediaItems := "" -}}
+      {{- range . -}}
+        {{- if eq $featureImageURL "" -}}
+          {{- if eq .type "image" -}}
+            {{- $featureImageURL = .preview_url | default .url -}}
+          {{- else if or (eq .type "gifv") (eq .type "video") -}}
+            {{- $featureImageURL = .preview_url | default "" -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $desc := .description | default "Attached media from Mastodon" | htmlEscape -}}
+        {{- if eq .type "image" -}}
+          {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><a href="%s" target="_blank" rel="noopener noreferrer"><img src="%s" alt="%s" loading="lazy" decoding="async" class="rounded-lg max-h-[600px] w-auto mx-auto" /></a></figure>` $mediaItems .url .url $desc -}}
+        {{- else if or (eq .type "gifv") (eq .type "video") -}}
+          {{- $loopAttr := cond (eq .type "gifv") "autoplay loop muted playsinline" "playsinline" -}}
+          {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><video src="%s" %s controls preload="metadata" aria-label="%s" class="rounded-lg max-h-[600px] w-auto mx-auto"></video></figure>` $mediaItems .url $loopAttr $desc -}}
+        {{- else if eq .type "audio" -}}
+          {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><audio src="%s" controls preload="metadata" class="w-full"></audio></figure>` $mediaItems .url -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if ne $mediaItems "" -}}
+        {{- $bodyHTML = printf "%s\n<div class=\"mastodon-media-gallery my-6\">%s</div>" $bodyHTML $mediaItems -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $postURL := $status.url | default (printf "%s/@%s/%s" $instance $username $id) -}}
+  {{- $hasFeatureImage := ne $featureImageURL "" -}}
+
+  {{- $params := dict
+    "source" "mastodon"
+    "summary" $summaryText
+    "previewHTML" $summaryHTML
+    "featureimage" $featureImageURL
+    "hideFeatureImage" (not $hasFeatureImage)
+    "showAuthor" false
+    "showAuthorBottom" true
+    "showDate" true
+    "showDateOnlyInArticle" true
+    "showDateUpdated" true
+    "showTaxonomies" false
+    "categories" (slice "Mastodon")
+    "tags" $tags
+    "mastodon" (dict
+      "instance" $instance
+      "host" $host
+      "username" $username
+      "id" $id
+      "url" $postURL
+      "replies_count" ($status.replies_count | default 0)
+      "reblogs_count" ($status.reblogs_count | default 0)
+      "favourites_count" ($status.favourites_count | default 0)
+    )
+  -}}
+
+  {{- $page := dict
+    "kind" "page"
+    "path" (printf "mastodon-%s" $id)
+    "title" $title
+    "dates" (dict
+      "date" $createdAt
+      "publishDate" $createdAt
+      "lastmod" $lastmod
+    )
+    "params" $params
+    "content" (dict
+      "mediaType" "text/markdown"
+      "value" $bodyHTML
+    )
+  -}}
+  {{- $.AddPage $page -}}
+{{- end -}}

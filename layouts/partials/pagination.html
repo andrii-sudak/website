@@ -1,0 +1,53 @@
+{{- if gt .Paginator.TotalPages 1 -}}
+  <ul class="pagination-list flex flex-row flex-wrap items-center gap-2 mt-10 justify-center list-none p-0">
+    {{- .Scratch.Set "paginator.ellipsed" false -}}
+    {{ if $.Paginator.HasPrev }}
+      <li>
+        <a
+          href="{{ $.Paginator.Prev.URL }}"
+          class="pagination-link block min-w-[2.25rem] px-3 py-1.5 rounded-lg text-center no-underline"
+          rel="prev"
+          aria-label="Previous page"
+          >&larr;</a
+        >
+      </li>
+    {{ end }}
+    {{- range $.Paginator.Pagers -}}
+      {{- $right := sub .TotalPages .PageNumber -}}
+      {{- $showNumber := or (le .PageNumber 1) (eq $right 0) -}}
+      {{- $showNumber := or $showNumber (and (gt .PageNumber (sub $.Paginator.PageNumber 3)) (lt .PageNumber (add $.Paginator.PageNumber 3))) -}}
+      {{- if $showNumber -}}
+        {{- $.Scratch.Set "paginator.ellipsed" false -}}
+        {{- $.Scratch.Set "paginator.shouldEllipse" false -}}
+      {{- else -}}
+        {{- $.Scratch.Set "paginator.shouldEllipse" (not ($.Scratch.Get "paginator.ellipsed") ) -}}
+        {{- $.Scratch.Set "paginator.ellipsed" true -}}
+      {{- end -}}
+      {{- if $showNumber -}}
+        <li>
+          <a
+            href="{{ .URL }}"
+            {{ if eq . $.Paginator }}aria-current="page"{{ end }}
+            class="pagination-link {{ if eq . $.Paginator }}pagination-link--active{{ end }} block min-w-[2.25rem] px-3 py-1.5 rounded-lg text-center no-underline"
+            >{{ .PageNumber }}</a
+          >
+        </li>
+      {{- else if ($.Scratch.Get "paginator.shouldEllipse") -}}
+        <li class="page-item px-1 text-neutral-500 dark:text-neutral-300 select-none">
+          <span class="page-link" aria-hidden="true">&hellip;</span>
+        </li>
+      {{- end -}}
+    {{- end -}}
+    {{ if $.Paginator.HasNext }}
+      <li>
+        <a
+          href="{{ $.Paginator.Next.URL }}"
+          class="pagination-link block min-w-[2.25rem] px-3 py-1.5 rounded-lg text-center no-underline"
+          rel="next"
+          aria-label="Next page"
+          >&rarr;</a
+        >
+      </li>
+    {{ end }}
+  </ul>
+{{- end -}}

@@ -1,28 +1,35 @@
 {{- $recentArticles := 5 -}}
+{{- $showMoreLinkDest := "/posts/" -}}
 {{- if .Site.Params.homepage.showRecent | default false -}}
   {{- if index .Site.Params.homepage "showRecentItems" -}}
     {{- $recentArticles = .Site.Params.homepage.showRecentItems -}}
   {{- end -}}
-
-  <div class="mt-8">
-    {{- if and .Site.Params.homepage.cardView (not .Site.Params.homepage.cardViewScreenWidth) | default false -}}
-      {{- partial "recent-articles/cardview.html" . -}}
-    {{- else if and .Site.Params.homepage.cardView .Site.Params.homepage.cardViewScreenWidth | default false -}}
-      {{- partial "recent-articles/cardview-fullwidth.html" . -}}
-    {{- else -}}
-      {{- partial "recent-articles/list.html" . -}}
-    {{- end -}}
-    {{- if .Site.Params.homepage.showMoreLink | default false -}}
-      {{- $showMoreLinkDest := "/posts/" -}}
-      {{- if index .Site.Params.homepage "showRecentItems" -}}
-        {{- $showMoreLinkDest = .Site.Params.homepage.showMoreLinkDest -}}
-      {{- end -}}
-      <a href="{{ $showMoreLinkDest }}" class="flex items-center mt-8 text-sm text-neutral-500 dark:text-neutral-400 hover:text-primary-500">
-        <span>{{ i18n "recent.show_more" | markdownify }}</span>
-        <span class="ml-1">
-          {{- partial "icons/arrow-right.svg" (dict "class" "h-4 w-4") -}}
-        </span>
-      </a>
-    {{- end -}}
+  <div class="home-section-divider my-10" aria-hidden="true">
+    <svg class="home-section-divider__svg" viewBox="0 0 600 28" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 8 H210 L224 22 H376 L390 8 H600" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M60 16 H202 L216 2 H384 L398 16 H540" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45" />
+    </svg>
   </div>
+
+  {{- if and .Site.Params.homepage.cardView (not .Site.Params.homepage.cardViewScreenWidth) | default false -}}
+    {{- partial "recent-articles/cardview.html" . -}}
+  {{- else if and .Site.Params.homepage.cardView .Site.Params.homepage.cardViewScreenWidth | default false -}}
+    {{- partial "recent-articles/cardview-fullwidth.html" . -}}
+  {{- else -}}
+    {{- partial "recent-articles/list.html" . -}}
+  {{- end -}}
+
+  {{- if .Site.Params.homepage.showMoreLink | default false -}}
+    {{- if index .Site.Params.homepage "showRecentItems" -}}
+      {{- $showMoreLinkDest = .Site.Params.homepage.showMoreLinkDest -}}
+    {{- end -}}
+    <div class="mt-10 flex justify-center">
+      <a
+        href="{{ $showMoreLinkDest | relLangURL }}"
+        class="pagination-link pagination-link--active inline-flex items-center gap-2 px-5 py-2 font-bold rounded-lg no-underline">
+        <span>{{ i18n "recent.show_more" | markdownify }}</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+  {{- end -}}
 {{- end -}}

@@ -1,0 +1,401 @@
+{{- $mastodon := .Params.mastodon -}}
+{{- if and $mastodon $mastodon.id -}}
+  {{- $instance := $mastodon.instance | default (site.Params.mastodon.instance | default "https://infosec.exchange") | strings.TrimRight "/" -}}
+  {{- $username := $mastodon.username | default (site.Params.mastodon.username | default "andrii_sudak") -}}
+  {{- $accountId := site.Params.mastodon.accountId | default "113526667200388301" -}}
+  {{- $statusId := printf "%v" $mastodon.id -}}
+  {{- $postURL := $mastodon.url | default (printf "%s/@%s/%s" $instance $username $statusId) -}}
+  {{- $repliesCount := $mastodon.replies_count | default 0 -}}
+  {{- $reblogsCount := $mastodon.reblogs_count | default 0 -}}
+  {{- $favouritesCount := $mastodon.favourites_count | default 0 -}}
+
+  <section
+    id="mastodon-comments-section"
+    class="mt-10 pt-8 border-t border-neutral-200 dark:border-neutral-700"
+    data-instance="{{ $instance }}"
+    data-status-id="{{ $statusId }}"
+    data-author-id="{{ $accountId }}"
+    data-author-username="{{ $username }}"
+    data-post-url="{{ $postURL }}">
+
+    <div class="mastodon-comments-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-2xl font-bold m-0 flex items-center gap-2.5 text-neutral-900 dark:text-neutral">
+          <span class="inline-flex h-6 w-6 items-center justify-center text-primary-500">
+            {{- partial "icon.html" "fediverse" -}}
+          </span>
+          <span>Comments</span>
+        </h2>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1 mb-0">
+          Powered by the Fediverse. Reply from any compatible server or view the
+          <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original post</a>.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="mastodon-stats" aria-label="Fediverse interactions">
+          <span class="mastodon-stat-item" title="Replies">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <strong id="mastodon-stat-replies">{{ $repliesCount }}</strong>
+          </span>
+          <span class="mastodon-stat-item" title="Boosts / Reposts">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+            <strong id="mastodon-stat-reblogs">{{ $reblogsCount }}</strong>
+          </span>
+          <span class="mastodon-stat-item" title="Favorites">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <strong id="mastodon-stat-favourites">{{ $favouritesCount }}</strong>
+          </span>
+        </div>
+
+        <button
+          type="button"
+          id="fediverse-reply-toggle"
+          aria-expanded="false"
+          aria-controls="fediverse-reply-panel"
+          class="mastodon-reply-btn inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg cursor-pointer">
+          {{- partial "icon.html" "fediverse" -}}
+          <span>Reply in Fediverse</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="fediverse-reply-panel" class="fediverse-reply-panel mb-6" hidden>
+      <div class="text-sm font-semibold mb-2 text-neutral-800 dark:text-neutral">
+        Reply from your own Fediverse server (Mastodon, Pleroma, Akkoma, Misskey, GoToSocial, etc.)
+      </div>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0 mb-3">
+        Enter your home instance domain to open this post directly on your server, or copy the post URI and paste it into the search bar of your Fediverse app.
+      </p>
+      <form id="fediverse-instance-form" class="flex flex-col sm:flex-row gap-2 mb-3">
+        <input
+          type="text"
+          id="fediverse-instance-input"
+          placeholder="your-instance.social (e.g. mastodon.social)"
+          autocomplete="url"
+          aria-label="Your Fediverse instance domain"
+          class="fediverse-input grow px-3 py-2 text-sm rounded-lg" />
+        <button type="submit" class="mastodon-reply-btn px-4 py-2 text-sm font-bold rounded-lg cursor-pointer shrink-0">
+          Open on my instance &rarr;
+        </button>
+      </form>
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="fediverse-copy-uri" class="fediverse-secondary-btn px-3 py-1.5 rounded-lg font-semibold cursor-pointer">
+            Copy post URI
+          </button>
+          <span class="text-neutral-500 dark:text-neutral-400 mono truncate max-w-xs sm:max-w-md">{{ $postURL }}</span>
+        </div>
+        <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">
+          Open original post &nearr;
+        </a>
+      </div>
+    </div>
+
+    <div id="mastodon-comments-list" class="space-y-4">
+      <div id="mastodon-comments-loading" class="text-sm text-neutral-500 dark:text-neutral-400 py-4">
+        Loading Fediverse replies…
+      </div>
+    </div>
+
+    <noscript>
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">
+        JavaScript is required to load live comments directly on this page. You can view and reply to the discussion directly on the
+        <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer">original Fediverse post</a>.
+      </p>
+    </noscript>
+  </section>
+
+  <script>
+    (function () {
+      const section = document.getElementById('mastodon-comments-section');
+      if (!section) return;
+
+      const instance = section.dataset.instance;
+      const statusId = section.dataset.statusId;
+      const authorId = section.dataset.authorId;
+      const authorUsername = section.dataset.authorUsername;
+      const postUrl = section.dataset.postUrl;
+      const listEl = document.getElementById('mastodon-comments-list');
+
+      // Universal Fediverse reply panel logic
+      const replyToggle = document.getElementById('fediverse-reply-toggle');
+      const replyPanel = document.getElementById('fediverse-reply-panel');
+      const instanceForm = document.getElementById('fediverse-instance-form');
+      const instanceInput = document.getElementById('fediverse-instance-input');
+      const copyBtn = document.getElementById('fediverse-copy-uri');
+
+      try {
+        const savedInstance = localStorage.getItem('fediverse_instance');
+        if (savedInstance && instanceInput) instanceInput.value = savedInstance;
+      } catch (e) {}
+
+      function toggleReplyPanel(forceOpen) {
+        if (!replyPanel || !replyToggle) return;
+        const willOpen = typeof forceOpen === 'boolean' ? forceOpen : replyPanel.hasAttribute('hidden');
+        if (willOpen) {
+          replyPanel.removeAttribute('hidden');
+          replyToggle.setAttribute('aria-expanded', 'true');
+          if (instanceInput) instanceInput.focus();
+        } else {
+          replyPanel.setAttribute('hidden', '');
+          replyToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      if (replyToggle) {
+        replyToggle.addEventListener('click', function () {
+          toggleReplyPanel();
+        });
+      }
+
+      if (instanceForm && instanceInput) {
+        instanceForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          let domain = (instanceInput.value || '').trim().replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+          if (!domain || domain.indexOf('.') === -1) {
+            instanceInput.focus();
+            return;
+          }
+          try {
+            localStorage.setItem('fediverse_instance', domain);
+          } catch (err) {}
+          const remoteUrl = 'https://' + domain + '/authorize_interaction?uri=' + encodeURIComponent(postUrl);
+          window.open(remoteUrl, '_blank', 'noopener,noreferrer');
+        });
+      }
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(postUrl).then(function () {
+              const orig = copyBtn.textContent;
+              copyBtn.textContent = 'Copied!';
+              setTimeout(function () { copyBtn.textContent = orig; }, 2000);
+            });
+          }
+        });
+      }
+
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function replaceCustomEmojis(text, emojis) {
+        let out = text;
+        if (!Array.isArray(emojis)) return out;
+        emojis.forEach(function (emoji) {
+          if (!emoji || !emoji.shortcode || !emoji.static_url) return;
+          const pattern = new RegExp(':' + emoji.shortcode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ':', 'g');
+          out = out.replace(
+            pattern,
+            '<img src="' + escapeHtml(emoji.static_url) + '" alt=":' + escapeHtml(emoji.shortcode) + ':" class="inline-block h-4 w-4 align-text-bottom mx-0.5" loading="lazy" />'
+          );
+        });
+        return out;
+      }
+
+      function sanitizeCommentHtml(dirtyHtml, emojis) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(dirtyHtml || '', 'text/html');
+        const allowedTags = new Set(['P', 'BR', 'A', 'SPAN', 'STRONG', 'B', 'EM', 'I', 'CODE', 'PRE', 'BLOCKQUOTE', 'UL', 'OL', 'LI', 'DEL']);
+
+        function cleanNode(node) {
+          const children = Array.from(node.childNodes);
+          children.forEach(function (child) {
+            if (child.nodeType === Node.ELEMENT_NODE) {
+              if (!allowedTags.has(child.tagName)) {
+                const text = document.createTextNode(child.textContent || '');
+                node.replaceChild(text, child);
+                return;
+              }
+              Array.from(child.attributes).forEach(function (attr) {
+                const name = attr.name.toLowerCase();
+                if (child.tagName === 'A' && name === 'href') {
+                  const href = child.getAttribute('href') || '';
+                  if (!/^https?:\/\//i.test(href) && !/^mailto:/i.test(href)) {
+                    child.removeAttribute('href');
+                  }
+                } else if (name === 'class') {
+                  // Keep safe formatting classes
+                } else {
+                  child.removeAttribute(attr.name);
+                }
+              });
+              if (child.tagName === 'A') {
+                child.setAttribute('target', '_blank');
+                child.setAttribute('rel', 'nofollow noopener noreferrer');
+              }
+              cleanNode(child);
+            } else if (child.nodeType !== Node.TEXT_NODE) {
+              node.removeChild(child);
+            }
+          });
+        }
+
+        cleanNode(doc.body);
+        return replaceCustomEmojis(doc.body.innerHTML, emojis);
+      }
+
+      function formatIsoDate(isoStr) {
+        if (!isoStr) return '';
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr;
+        const pad = function (n) { return String(n).padStart(2, '0'); };
+        return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + ' ' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ' UTC';
+      }
+
+      function renderMediaAttachments(attachments) {
+        if (!Array.isArray(attachments) || attachments.length === 0) return '';
+        return '<div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">' + attachments.map(function (att) {
+          const url = escapeHtml(att.url || att.preview_url || '');
+          const preview = escapeHtml(att.preview_url || att.url || '');
+          const desc = escapeHtml(att.description || 'Attached media');
+          if (att.type === 'image') {
+            return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"><img src="' + preview + '" alt="' + desc + '" loading="lazy" class="rounded-lg max-h-64 w-auto" /></a>';
+          }
+          if (att.type === 'gifv' || att.type === 'video') {
+            return '<video src="' + url + '" controls playsinline preload="metadata" class="rounded-lg max-h-64 w-auto"></video>';
+          }
+          return '';
+        }).join('') + '</div>';
+      }
+
+      const starSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+
+      function renderCommentNode(reply, childrenMap, depth) {
+        const acct = reply.account || {};
+        const isAuthor = String(acct.id) === String(authorId) || String(acct.acct) === String(authorUsername);
+        const displayName = replaceCustomEmojis(escapeHtml(acct.display_name || acct.username || 'User'), acct.emojis);
+        const fullHandle = '@' + escapeHtml(acct.acct || acct.username || '');
+        const avatar = escapeHtml(acct.avatar_static || acct.avatar || '');
+        const profileUrl = escapeHtml(acct.url || '#');
+        const replyUrl = escapeHtml(reply.url || postUrl);
+        const createdAt = formatIsoDate(reply.created_at);
+        const favCount = Number(reply.favourites_count || 0);
+        const bodyHtml = sanitizeCommentHtml(reply.content, reply.emojis);
+        const mediaHtml = renderMediaAttachments(reply.media_attachments);
+
+        const children = childrenMap.get(String(reply.id)) || [];
+        const nestedHtml = children.length > 0
+          ? '<div class="mastodon-comment-children mt-3 pl-4 sm:pl-6 border-l-2 border-neutral-200 dark:border-neutral-700 space-y-3">' +
+              children.map(function (c) { return renderCommentNode(c, childrenMap, depth + 1); }).join('') +
+            '</div>'
+          : '';
+
+        return (
+          '<article class="mastodon-comment p-4 rounded-lg" id="comment-' + escapeHtml(reply.id) + '">' +
+            '<header class="flex items-center justify-between gap-2 mb-2">' +
+              '<div class="flex items-center gap-3 min-w-0">' +
+                '<a href="' + profileUrl + '" target="_blank" rel="nofollow noopener noreferrer" class="shrink-0">' +
+                  '<img src="' + avatar + '" alt="" loading="lazy" class="h-10 w-10 rounded-lg object-cover" />' +
+                '</a>' +
+                '<div class="min-w-0">' +
+                  '<div class="flex flex-wrap items-center gap-2">' +
+                    '<a href="' + profileUrl + '" target="_blank" rel="nofollow noopener noreferrer" class="font-bold text-sm hover:underline truncate">' +
+                      displayName +
+                    '</a>' +
+                    (isAuthor ? '<span class="mastodon-author-pill text-xs px-2 py-0.5 rounded font-semibold">Author</span>' : '') +
+                  '</div>' +
+                  '<div class="text-xs text-neutral-500 dark:text-neutral-400 truncate mono">' + fullHandle + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<a href="' + replyUrl + '" target="_blank" rel="nofollow noopener noreferrer" class="text-xs text-neutral-500 dark:text-neutral-400 hover:underline shrink-0 mono" title="View reply in the Fediverse">' +
+                createdAt +
+              '</a>' +
+            '</header>' +
+            '<div class="mastodon-comment-body prose dark:prose-invert max-w-none text-sm">' +
+              bodyHtml +
+              mediaHtml +
+            '</div>' +
+            (favCount > 0
+              ? '<footer class="mt-2 text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">' +
+                  '<span class="mastodon-stat-item" title="Favorites">' + starSvg + ' <span>' + favCount + '</span></span>' +
+                '</footer>'
+              : '') +
+          '</article>' +
+          nestedHtml
+        );
+      }
+
+      // 1. Update live interaction counts
+      fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId))
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (statusData) {
+          if (!statusData) return;
+          const rEl = document.getElementById('mastodon-stat-replies');
+          const bEl = document.getElementById('mastodon-stat-reblogs');
+          const fEl = document.getElementById('mastodon-stat-favourites');
+          if (rEl && typeof statusData.replies_count === 'number') rEl.textContent = statusData.replies_count;
+          if (bEl && typeof statusData.reblogs_count === 'number') bEl.textContent = statusData.reblogs_count;
+          if (fEl && typeof statusData.favourites_count === 'number') fEl.textContent = statusData.favourites_count;
+        })
+        .catch(function () {});
+
+      // 2. Fetch and render replies tree
+      fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId) + '/context')
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          const descendants = Array.isArray(data && data.descendants) ? data.descendants : [];
+          const publicReplies = descendants.filter(function (d) {
+            return d && (d.visibility === 'public' || d.visibility === 'unlisted');
+          });
+
+          if (publicReplies.length === 0) {
+            listEl.innerHTML =
+              '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
+                'No comments yet. Be the first to <button type="button" id="fediverse-empty-reply-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">reply in the Fediverse</button>!' +
+              '</div>';
+            const emptyBtn = document.getElementById('fediverse-empty-reply-btn');
+            if (emptyBtn) {
+              emptyBtn.addEventListener('click', function () {
+                toggleReplyPanel(true);
+              });
+            }
+            return;
+          }
+
+          const knownIds = new Set(publicReplies.map(function (r) { return String(r.id); }));
+          const childrenMap = new Map();
+          const roots = [];
+
+          publicReplies.forEach(function (reply) {
+            const parentId = String(reply.in_reply_to_id || '');
+            if (!parentId || parentId === String(statusId) || !knownIds.has(parentId)) {
+              roots.push(reply);
+            } else {
+              if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
+              childrenMap.get(parentId).push(reply);
+            }
+          });
+
+          listEl.innerHTML = roots.map(function (root) {
+            return renderCommentNode(root, childrenMap, 0);
+          }).join('');
+        })
+        .catch(function () {
+          listEl.innerHTML =
+            '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400">' +
+              'Could not load live replies right now. View the discussion directly on the <a href="' + escapeHtml(postUrl) + '" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original Fediverse post</a>.' +
+            '</div>';
+        });
+    })();
+  </script>
+{{- end -}}

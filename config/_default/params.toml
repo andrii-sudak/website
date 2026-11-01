@@ -6,14 +6,27 @@ logo = "img/logo.svg"
 #replyByEmail = true
 #highlightCurrentMenuArea = true
 defaultFeaturedImage = "img/feature_default.png"
+hotlinkFeatureImage = true
 disableImageZoom = true
 enableFontPreload = true
+mainSections = ["posts"]
 
 
 [homepage]
   layout = "profile"
   showRecent = true
   showRecentItems = 5
+  showMoreLink = true
+  showMoreLinkDest = "/posts/"
+
+[list]
+  showSummary = true
+  groupByYear = true
+
+[mastodon]
+  instance = "https://infosec.exchange"
+  username = "andrii_sudak"
+  accountId = "113526667200388301"
 
 [author]
   name = "Andrii Sudak"

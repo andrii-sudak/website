@@ -2,11 +2,6 @@
 #  name = "Main"
 #  url = "/"
 #  weight = 5
-#
-#[[main]]
-#  name = "Posts"
-#  url = "/posts/"
-#  weight = 10
 
 [[main]]
   name = "Home"
@@ -22,4 +17,9 @@
   name = "Schedule"
   url = "https://andrii-sudak.com/schedule"
   weight = 30
+
+[[main]]
+  name = "Posts"
+  url = "/posts/"
+  weight = 40
 
