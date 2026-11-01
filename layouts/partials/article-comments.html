@@ -70,34 +70,36 @@
     </div>
 
     <div id="fediverse-reply-panel" class="fediverse-reply-panel mb-6" hidden>
-      <div class="text-sm font-semibold mb-2 text-neutral-800 dark:text-neutral">
-        Reply from your own Fediverse server (Mastodon, Pleroma, Akkoma, Misskey, GoToSocial, etc.)
-      </div>
-      <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0 mb-3">
-        Enter your home instance domain to open this post directly on your server, or copy the post URI and paste it into the search bar of your Fediverse app.
-      </p>
       <form id="fediverse-instance-form" class="flex flex-col sm:flex-row gap-2 mb-3">
         <input
           type="text"
           id="fediverse-instance-input"
-          placeholder="your-instance.social (e.g. mastodon.social)"
+          placeholder="your.instance.tld"
           autocomplete="url"
           aria-label="Your Fediverse instance domain"
           class="fediverse-input grow px-3 py-2 text-sm rounded-lg" />
         <button type="submit" class="mastodon-reply-btn px-4 py-2 text-sm font-bold rounded-lg cursor-pointer shrink-0">
-          Open on my instance &rarr;
+          Open on instance &rarr;
         </button>
       </form>
+      <div id="fediverse-sync-hint" class="text-xs text-primary-500 font-semibold mb-3" hidden>
+        Waiting for reply… Comments will refresh automatically.
+      </div>
       <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-neutral-200 dark:border-neutral-700 text-xs min-w-0">
         <div class="flex items-center gap-2 min-w-0 max-w-full">
           <button type="button" id="fediverse-copy-uri" class="fediverse-secondary-btn px-3 py-1.5 rounded-lg font-semibold cursor-pointer shrink-0">
-            Copy post URI
+            Copy URI
           </button>
           <span class="fediverse-uri-preview text-neutral-500 dark:text-neutral-400 mono">{{ $postURL }}</span>
         </div>
-        <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold shrink-0">
-          Open original post &nearr;
-        </a>
+        <div class="flex items-center gap-3 shrink-0">
+          <button type="button" id="fediverse-refresh-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">
+            Refresh
+          </button>
+          <a href="{{ $postURL }}" id="fediverse-open-original" target="_blank" rel="noopener noreferrer" class="underline font-semibold">
+            Original post &nearr;
+          </a>
+        </div>
       </div>
     </div>
 
@@ -127,12 +129,18 @@
       const postUrl = section.dataset.postUrl;
       const listEl = document.getElementById('mastodon-comments-list');
 
-      // Universal Fediverse reply panel logic
       const replyToggle = document.getElementById('fediverse-reply-toggle');
       const replyPanel = document.getElementById('fediverse-reply-panel');
       const instanceForm = document.getElementById('fediverse-instance-form');
       const instanceInput = document.getElementById('fediverse-instance-input');
       const copyBtn = document.getElementById('fediverse-copy-uri');
+      const refreshBtn = document.getElementById('fediverse-refresh-btn');
+      const openOriginalLink = document.getElementById('fediverse-open-original');
+      const syncHint = document.getElementById('fediverse-sync-hint');
+
+      let interactedWithReplyFlow = false;
+      let activePopup = null;
+      let popupTimer = null;
 
       try {
         const savedInstance = localStorage.getItem('fediverse_instance');
@@ -149,6 +157,47 @@
         } else {
           replyPanel.setAttribute('hidden', '');
           replyToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      function scheduleAutoRefresh() {
+        loadCommentsAndStats(true);
+        setTimeout(function () { loadCommentsAndStats(true); }, 3000);
+        setTimeout(function () {
+          loadCommentsAndStats(true);
+          if (syncHint) syncHint.setAttribute('hidden', '');
+        }, 7000);
+      }
+
+      function openFediversePopup(targetUrl) {
+        interactedWithReplyFlow = true;
+        if (syncHint) syncHint.removeAttribute('hidden');
+
+        const w = 540;
+        const h = 680;
+        const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+        const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+        const left = Math.max(0, Math.round((viewportWidth - w) / 2 + dualScreenLeft));
+        const top = Math.max(0, Math.round((viewportHeight - h) / 2 + dualScreenTop));
+
+        const features = 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top + ',menubar=no,toolbar=no,location=yes,status=no,scrollbars=yes,resizable=yes';
+        activePopup = window.open(targetUrl, 'fediverse_reply_popup', features);
+
+        if (activePopup) {
+          if (activePopup.focus) activePopup.focus();
+          if (popupTimer) clearInterval(popupTimer);
+          popupTimer = setInterval(function () {
+            if (!activePopup || activePopup.closed) {
+              clearInterval(popupTimer);
+              popupTimer = null;
+              activePopup = null;
+              scheduleAutoRefresh();
+            }
+          }, 700);
+        } else {
+          window.open(targetUrl, '_blank', 'noopener,noreferrer');
         }
       }
 
@@ -170,12 +219,20 @@
             localStorage.setItem('fediverse_instance', domain);
           } catch (err) {}
           const remoteUrl = 'https://' + domain + '/authorize_interaction?uri=' + encodeURIComponent(postUrl);
-          window.open(remoteUrl, '_blank', 'noopener,noreferrer');
+          openFediversePopup(remoteUrl);
+        });
+      }
+
+      if (openOriginalLink) {
+        openOriginalLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          openFediversePopup(postUrl);
         });
       }
 
       if (copyBtn) {
         copyBtn.addEventListener('click', function () {
+          interactedWithReplyFlow = true;
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(postUrl).then(function () {
               const orig = copyBtn.textContent;
@@ -185,6 +242,22 @@
           }
         });
       }
+
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', function () {
+          const orig = refreshBtn.textContent;
+          refreshBtn.textContent = 'Refreshing…';
+          loadCommentsAndStats(true).finally(function () {
+            setTimeout(function () { refreshBtn.textContent = orig; }, 600);
+          });
+        });
+      }
+
+      window.addEventListener('focus', function () {
+        if (interactedWithReplyFlow) {
+          scheduleAutoRefresh();
+        }
+      });
 
       function escapeHtml(str) {
         return String(str || '')
@@ -332,70 +405,76 @@
         );
       }
 
-      // 1. Update live interaction counts
-      fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId))
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (statusData) {
-          if (!statusData) return;
-          const rEl = document.getElementById('mastodon-stat-replies');
-          const bEl = document.getElementById('mastodon-stat-reblogs');
-          const fEl = document.getElementById('mastodon-stat-favourites');
-          if (rEl && typeof statusData.replies_count === 'number') rEl.textContent = statusData.replies_count;
-          if (bEl && typeof statusData.reblogs_count === 'number') bEl.textContent = statusData.reblogs_count;
-          if (fEl && typeof statusData.favourites_count === 'number') fEl.textContent = statusData.favourites_count;
-        })
-        .catch(function () {});
+      function loadCommentsAndStats(bustCache) {
+        const suffix = bustCache ? '?_=' + Date.now() : '';
 
-      // 2. Fetch and render replies tree
-      fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId) + '/context')
-        .then(function (res) {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          return res.json();
-        })
-        .then(function (data) {
-          const descendants = Array.isArray(data && data.descendants) ? data.descendants : [];
-          const publicReplies = descendants.filter(function (d) {
-            return d && (d.visibility === 'public' || d.visibility === 'unlisted');
-          });
+        fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId) + suffix)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (statusData) {
+            if (!statusData) return;
+            const rEl = document.getElementById('mastodon-stat-replies');
+            const bEl = document.getElementById('mastodon-stat-reblogs');
+            const fEl = document.getElementById('mastodon-stat-favourites');
+            if (rEl && typeof statusData.replies_count === 'number') rEl.textContent = statusData.replies_count;
+            if (bEl && typeof statusData.reblogs_count === 'number') bEl.textContent = statusData.reblogs_count;
+            if (fEl && typeof statusData.favourites_count === 'number') fEl.textContent = statusData.favourites_count;
+          })
+          .catch(function () {});
 
-          if (publicReplies.length === 0) {
-            listEl.innerHTML =
-              '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
-                'No comments yet. Be the first to <button type="button" id="fediverse-empty-reply-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">reply in the Fediverse</button>!' +
-              '</div>';
-            const emptyBtn = document.getElementById('fediverse-empty-reply-btn');
-            if (emptyBtn) {
-              emptyBtn.addEventListener('click', function () {
-                toggleReplyPanel(true);
-              });
+        return fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId) + '/context' + suffix)
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(function (data) {
+            const descendants = Array.isArray(data && data.descendants) ? data.descendants : [];
+            const publicReplies = descendants.filter(function (d) {
+              return d && (d.visibility === 'public' || d.visibility === 'unlisted');
+            });
+
+            if (publicReplies.length === 0) {
+              listEl.innerHTML =
+                '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
+                  'No comments yet. Be the first to <button type="button" id="fediverse-empty-reply-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">reply in the Fediverse</button>!' +
+                '</div>';
+              const emptyBtn = document.getElementById('fediverse-empty-reply-btn');
+              if (emptyBtn) {
+                emptyBtn.addEventListener('click', function () {
+                  toggleReplyPanel(true);
+                });
+              }
+              return;
             }
-            return;
-          }
 
-          const knownIds = new Set(publicReplies.map(function (r) { return String(r.id); }));
-          const childrenMap = new Map();
-          const roots = [];
+            const knownIds = new Set(publicReplies.map(function (r) { return String(r.id); }));
+            const childrenMap = new Map();
+            const roots = [];
 
-          publicReplies.forEach(function (reply) {
-            const parentId = String(reply.in_reply_to_id || '');
-            if (!parentId || parentId === String(statusId) || !knownIds.has(parentId)) {
-              roots.push(reply);
-            } else {
-              if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
-              childrenMap.get(parentId).push(reply);
+            publicReplies.forEach(function (reply) {
+              const parentId = String(reply.in_reply_to_id || '');
+              if (!parentId || parentId === String(statusId) || !knownIds.has(parentId)) {
+                roots.push(reply);
+              } else {
+                if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
+                childrenMap.get(parentId).push(reply);
+              }
+            });
+
+            listEl.innerHTML = roots.map(function (root) {
+              return renderCommentNode(root, childrenMap, 0);
+            }).join('');
+          })
+          .catch(function () {
+            if (!bustCache) {
+              listEl.innerHTML =
+                '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400">' +
+                  'Could not load live replies right now. View the discussion directly on the <a href="' + escapeHtml(postUrl) + '" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original Fediverse post</a>.' +
+                '</div>';
             }
           });
+      }
 
-          listEl.innerHTML = roots.map(function (root) {
-            return renderCommentNode(root, childrenMap, 0);
-          }).join('');
-        })
-        .catch(function () {
-          listEl.innerHTML =
-            '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400">' +
-              'Could not load live replies right now. View the discussion directly on the <a href="' + escapeHtml(postUrl) + '" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original Fediverse post</a>.' +
-            '</div>';
-        });
+      loadCommentsAndStats(false);
     })();
   </script>
 {{- end -}}
