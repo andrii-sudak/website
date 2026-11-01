@@ -337,11 +337,19 @@ html.dark body::before {
 }
 
 .mastodon-source-badge .icon svg,
-.mastodon-reply-btn .icon svg {
+.mastodon-reply-btn .icon svg,
+.posts-filter__icon .icon svg {
   width: 0.95rem !important;
   height: 0.95rem !important;
   fill: currentColor;
   display: block;
+}
+
+.posts-filter a.pagination-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.85rem !important;
 }
 
 .mastodon-comments-header .icon svg {

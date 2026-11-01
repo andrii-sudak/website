@@ -1,0 +1,33 @@
+{{- $allPosts := where site.RegularPages "Section" "posts" -}}
+{{- $categories := site.Taxonomies.categories -}}
+{{- if gt (len $categories) 0 -}}
+  {{- $currentRel := .RelPermalink -}}
+  {{- $isAll := hasPrefix $currentRel "/posts/" -}}
+  <nav class="posts-filter flex flex-wrap items-center gap-2 mt-4 mb-6 print:hidden" aria-label="Filter posts by source">
+    <a
+      href="{{ "/posts/" | relLangURL }}"
+      class="pagination-link {{ if $isAll }}pagination-link--active{{ end }} inline-flex items-center gap-2 px-3.5 py-1.5 text-sm no-underline">
+      <span>All</span>
+      <span class="posts-filter__count text-xs opacity-75">({{ len $allPosts }})</span>
+    </a>
+
+    {{- range $name, $taxonomy := $categories -}}
+      {{- $termPage := site.GetPage (printf "/categories/%s" $name) -}}
+      {{- if $termPage -}}
+        {{- $isActive := hasPrefix $currentRel $termPage.RelPermalink -}}
+        {{- $lowerName := lower $name -}}
+        <a
+          href="{{ $termPage.RelPermalink }}"
+          class="pagination-link {{ if $isActive }}pagination-link--active{{ end }} inline-flex items-center gap-2 px-3.5 py-1.5 text-sm no-underline">
+          {{- if or (eq $lowerName "mastodon") (eq $lowerName "pixelfed") -}}
+            <span class="posts-filter__icon inline-flex items-center justify-center">
+              {{- partial "icon.html" $lowerName -}}
+            </span>
+          {{- end -}}
+          <span>{{ $termPage.LinkTitle }}</span>
+          <span class="posts-filter__count text-xs opacity-75">({{ len $taxonomy.Pages }})</span>
+        </a>
+      {{- end -}}
+    {{- end -}}
+  </nav>
+{{- end -}}
