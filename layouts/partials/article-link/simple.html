@@ -6,18 +6,10 @@
 {{ $constrainItemsWidth := site.Params.list.constrainItemsWidth | default false }}
 {{ $disableImageOptimization := site.Store.Get "disableImageOptimization" }}
 
-{{ $cardClasses := "flex flex-col md:flex-row relative" }}
-{{ $imgWrapperClasses := "" }}
-{{ $cardContentClasses := "" }}
+{{ $cardClasses := "flex flex-col relative w-full" }}
 
 {{ if .Params.showCards | default site.Params.list.showCards }}
-  {{ $cardClasses = printf "%s overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600" $cardClasses }}
-  {{ $imgWrapperClasses = "" }}
-  {{ $cardContentClasses = printf "%s p-4" $cardContentClasses }}
-{{ else }}
-  {{ $cardClasses = $cardClasses }}
-  {{ $imgWrapperClasses = printf "%s thumbnail-shadow md:mr-7" $imgWrapperClasses }}
-  {{ $cardContentClasses = printf "%s mt-3 md:mt-0" $cardContentClasses }}
+  {{ $cardClasses = printf "%s overflow-hidden rounded-lg border border-neutral-300 dark:border-neutral-600 p-4" $cardClasses }}
 {{ end }}
 
 {{ if $constrainItemsWidth }}
@@ -81,60 +73,69 @@
   {{ end }}
 {{ end }}
 
-
 <article class="article-link--simple group {{ $cardClasses }}">
-  {{ with $featuredURL }}
-    <div class="flex-none relative overflow-hidden {{ $imgWrapperClasses }} thumbnail">
-      <img
-        src="{{ . }}"
-        alt="{{ $page.Title }}"
-        loading="lazy"
-        decoding="async"
-        fetchpriority="low"
-        class="nozoom not-prose absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] {{ if $featureImageHover }}group-hover:scale-[1.03]{{ end }}"
-        {{ with $featureImagePosition }}style="object-position: {{ . }};"{{ end }} />
-    </div>
-  {{ end }}
-  <div class="{{ $cardContentClasses }}">
-    <header class="items-center text-start text-xl font-semibold">
-      <a
-        {{ with $page.Params.externalUrl }}
-          href="{{ . }}" target="_blank" rel="external"
-        {{ else }}
-          href="{{ $page.RelPermalink }}"
-        {{ end }}
-        class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
-        <h2>
-          {{ .Title | emojify }}
-          {{ if .Params.externalUrl }}
-            <span class="cursor-default align-top text-xs text-neutral-400 dark:text-neutral-500">
-              <span class="rtl:hidden">&#8599;</span>
-              <span class="ltr:hidden">&#8598;</span>
-            </span>
-          {{ end }}
-        </h2>
-      </a>
-      {{ if and .Draft .Site.Params.article.showDraftLabel }}
-        <div class="ms-2">{{ partial "badge.html" (i18n "article.draft" | emojify) }}</div>
-      {{ end }}
-      {{ if templates.Exists "partials/extend-article-link.html" }}
-        {{ partial "extend-article-link.html" . }}
-      {{ end }}
-    </header>
-    <div class="text-sm text-neutral-500 dark:text-neutral-400">
-      {{ partial "article-meta/basic.html" . }}
-    </div>
-    {{ if .Params.showSummary | default (site.Params.list.showSummary | default false) }}
-      {{ with .Params.previewHTML }}
-        <div class="article-link__summary mastodon-post-content prose dark:prose-invert max-w-prose mt-2">
-          {{ . | safeHTML }}
-        </div>
+  {{/* Consistent Header across all post types (Title + Badge) */}}
+  <header class="items-center text-start text-xl font-semibold flex flex-wrap gap-2.5 mb-1">
+    <a
+      {{ with $page.Params.externalUrl }}
+        href="{{ . }}" target="_blank" rel="external"
       {{ else }}
-        <div class="article-link__summary prose dark:prose-invert max-w-fit mt-1 line-clamp-3">
-          {{ .Summary | plainify }}
-        </div>
+        href="{{ $page.RelPermalink }}"
       {{ end }}
+      class="not-prose before:absolute before:inset-0 decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
+      <h2>
+        {{ .Title | emojify }}
+        {{ if .Params.externalUrl }}
+          <span class="cursor-default align-top text-xs text-neutral-400 dark:text-neutral-500">
+            <span class="rtl:hidden">&#8599;</span>
+            <span class="ltr:hidden">&#8598;</span>
+          </span>
+        {{ end }}
+      </h2>
+    </a>
+    {{ if and .Draft .Site.Params.article.showDraftLabel }}
+      <div class="ms-2">{{ partial "badge.html" (i18n "article.draft" | emojify) }}</div>
     {{ end }}
+    {{ if templates.Exists "partials/extend-article-link.html" }}
+      {{ partial "extend-article-link.html" . }}
+    {{ end }}
+  </header>
+
+  {{/* Optional post meta (e.g. date) */}}
+  {{ with partial "article-meta/basic.html" . }}
+    {{ if ne (strings.TrimSpace .) "" }}
+      <div class="text-sm text-neutral-500 dark:text-neutral-400 mb-2">
+        {{ . }}
+      </div>
+    {{ end }}
+  {{ end }}
+
+  {{/* Content level: thumbnail + summary side by side at content level */}}
+  <div class="flex flex-col md:flex-row items-start gap-4 mt-1 w-full">
+    {{ with $featuredURL }}
+      <div class="flex-none relative overflow-hidden thumbnail-shadow thumbnail">
+        <img
+          src="{{ . }}"
+          alt="{{ $page.Title }}"
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
+          class="nozoom not-prose absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] {{ if $featureImageHover }}group-hover:scale-[1.03]{{ end }}"
+          {{ with $featureImagePosition }}style="object-position: {{ . }};"{{ end }} />
+      </div>
+    {{ end }}
+    <div class="min-w-0 grow">
+      {{ if .Params.showSummary | default (site.Params.list.showSummary | default false) }}
+        {{ with .Params.previewHTML }}
+          <div class="article-link__summary mastodon-post-content prose dark:prose-invert max-w-prose">
+            {{ . | safeHTML }}
+          </div>
+        {{ else }}
+          <div class="article-link__summary prose dark:prose-invert max-w-fit line-clamp-3">
+            {{ .Summary | plainify }}
+          </div>
+        {{ end }}
+      {{ end }}
+    </div>
   </div>
-  <div class="px-6 pt-4 pb-2"></div>
 </article>

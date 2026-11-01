@@ -10,6 +10,7 @@
   {{- $reblogsCount := $mastodon.reblogs_count | default 0 -}}
   {{- $favouritesCount := $mastodon.favourites_count | default 0 -}}
   {{- $initialReplies := $mastodon.initial_replies | default "[]" -}}
+  {{- $isDevto := eq $source "devto" -}}
 
   <section
     id="mastodon-comments-section"
@@ -26,24 +27,30 @@
       <div>
         <h2 class="text-2xl font-bold m-0 flex items-center gap-2.5 text-neutral-900 dark:text-neutral">
           <span class="inline-flex h-6 w-6 items-center justify-center text-primary-500">
-            {{- partial "icon.html" "fediverse" -}}
+            {{- partial "icon.html" (cond $isDevto "dev" "fediverse") -}}
           </span>
           <span>Comments</span>
         </h2>
         <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1 mb-0">
+          {{- if $isDevto }}
+          Powered by DEV.to. Join the discussion on the
+          <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original article</a>.
+          {{- else }}
           Powered by the Fediverse (ActivityPub). Reply from any compatible server or view the
           <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original post</a>.
+          {{- end }}
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-3">
-        <div class="mastodon-stats" aria-label="Fediverse interactions">
+        <div class="mastodon-stats" aria-label="Interactions">
           <span class="mastodon-stat-item" title="Replies">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
             <strong id="mastodon-stat-replies">{{ $repliesCount }}</strong>
           </span>
+          {{- if not $isDevto }}
           <span class="mastodon-stat-item" title="Boosts / Reposts">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
               <polyline points="17 1 21 5 17 9"></polyline>
@@ -53,7 +60,8 @@
             </svg>
             <strong id="mastodon-stat-reblogs">{{ $reblogsCount }}</strong>
           </span>
-          <span class="mastodon-stat-item" title="Favorites">
+          {{- end }}
+          <span class="mastodon-stat-item" title="{{ cond $isDevto "Reactions" "Favorites" }}">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mastodon-stat-icon" aria-hidden="true">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
@@ -61,6 +69,17 @@
           </span>
         </div>
 
+        {{- if $isDevto }}
+        <a
+          href="{{ $postURL }}#comments"
+          id="devto-comment-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mastodon-reply-btn inline-flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-lg cursor-pointer no-underline">
+          {{- partial "icon.html" "dev" -}}
+          <span>Comment on DEV.to</span>
+        </a>
+        {{- else }}
         <button
           type="button"
           id="fediverse-reply-toggle"
@@ -70,9 +89,11 @@
           {{- partial "icon.html" "fediverse" -}}
           <span>Reply in Fediverse</span>
         </button>
+        {{- end }}
       </div>
     </div>
 
+    {{- if not $isDevto }}
     <div id="fediverse-reply-panel" class="fediverse-reply-panel mb-6" hidden>
       <form id="fediverse-instance-form" class="flex flex-col sm:flex-row gap-2 mb-3">
         <input
@@ -106,10 +127,11 @@
         </div>
       </div>
     </div>
+    {{- end }}
 
     <div id="mastodon-comments-list" class="space-y-4">
       <div id="mastodon-comments-loading" class="text-sm text-neutral-500 dark:text-neutral-400 py-4">
-        Loading Fediverse replies…
+        Loading comments…
       </div>
     </div>
 
@@ -265,6 +287,14 @@
           scheduleAutoRefresh();
         }
       });
+
+      const devtoBtn = document.getElementById('devto-comment-btn');
+      if (devtoBtn) {
+        devtoBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          openFediversePopup(devtoBtn.href);
+        });
+      }
 
       function escapeHtml(str) {
         return String(str || '')
@@ -450,7 +480,82 @@
         }).join('');
       }
 
+      function renderDevtoComment(c) {
+        const user = c.user || {};
+        const isAuthor = String(user.username) === String(authorUsername);
+        const profileUrl = 'https://dev.to/' + encodeURIComponent(user.username || '');
+        const commentUrl = profileUrl + '/comment/' + encodeURIComponent(c.id_code || '');
+        const children = Array.isArray(c.children) ? c.children : [];
+        const nestedHtml = children.length > 0
+          ? '<div class="mastodon-comment-children mt-3 pl-4 sm:pl-6 border-l-2 border-neutral-200 dark:border-neutral-700 space-y-3">' +
+              children.map(renderDevtoComment).join('') +
+            '</div>'
+          : '';
+        return (
+          '<article class="mastodon-comment p-4 rounded-lg" id="comment-' + escapeHtml(c.id_code) + '">' +
+            '<header class="flex items-center justify-between gap-2 mb-2">' +
+              '<div class="flex items-center gap-3 min-w-0">' +
+                '<a href="' + escapeHtml(profileUrl) + '" target="_blank" rel="nofollow noopener noreferrer" class="shrink-0">' +
+                  '<img src="' + escapeHtml(user.profile_image_90 || '') + '" alt="" loading="lazy" class="h-10 w-10 rounded-lg object-cover" />' +
+                '</a>' +
+                '<div class="min-w-0">' +
+                  '<div class="flex flex-wrap items-center gap-2">' +
+                    '<a href="' + escapeHtml(profileUrl) + '" target="_blank" rel="nofollow noopener noreferrer" class="font-bold text-sm hover:underline truncate">' +
+                      escapeHtml((user.name || user.username || 'User').trim()) +
+                    '</a>' +
+                    (isAuthor ? '<span class="mastodon-author-pill text-xs px-2 py-0.5 rounded font-semibold">Author</span>' : '') +
+                  '</div>' +
+                  '<div class="text-xs text-neutral-500 dark:text-neutral-400 truncate mono">@' + escapeHtml(user.username || '') + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<a href="' + escapeHtml(commentUrl) + '" target="_blank" rel="nofollow noopener noreferrer" class="text-xs text-neutral-500 dark:text-neutral-400 hover:underline shrink-0 mono" title="View comment on DEV.to">' +
+                formatIsoDate(c.created_at) +
+              '</a>' +
+            '</header>' +
+            '<div class="mastodon-comment-body prose dark:prose-invert max-w-none text-sm">' +
+              sanitizeCommentHtml(c.body_html, []) +
+            '</div>' +
+          '</article>' +
+          nestedHtml
+        );
+      }
+
+      function loadDevto(bustCache) {
+        const suffix = bustCache ? '&_=' + Date.now() : '';
+        fetch('https://dev.to/api/articles/' + encodeURIComponent(statusId) + (bustCache ? '?_=' + Date.now() : ''))
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (a) {
+            if (!a) return;
+            const fEl = document.getElementById('mastodon-stat-favourites');
+            if (fEl && typeof a.public_reactions_count === 'number') fEl.textContent = a.public_reactions_count;
+          })
+          .catch(function () {});
+
+        function countDevtoComments(list) {
+          return (Array.isArray(list) ? list : []).reduce(function (n, c) {
+            return n + 1 + countDevtoComments(c && c.children);
+          }, 0);
+        }
+
+        return fetch('https://dev.to/api/comments?a_id=' + encodeURIComponent(statusId) + suffix)
+          .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+          .then(function (comments) {
+            const rEl = document.getElementById('mastodon-stat-replies');
+            if (rEl) rEl.textContent = countDevtoComments(comments);
+            if (!Array.isArray(comments) || comments.length === 0) throw new Error('empty');
+            listEl.innerHTML = comments.map(renderDevtoComment).join('');
+          })
+          .catch(function () {
+            listEl.innerHTML =
+              '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
+                'No comments yet. Be the first to <a href="' + escapeHtml(postUrl) + '#comments" target="_blank" rel="noopener noreferrer" class="underline font-semibold">comment on DEV.to</a>!' +
+              '</div>';
+          });
+      }
+
       function loadCommentsAndStats(bustCache) {
+        if (source === 'devto') return loadDevto(bustCache);
+
         const suffix = bustCache ? '?_=' + Date.now() : '';
 
         if (source === 'pixelfed') {

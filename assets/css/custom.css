@@ -302,6 +302,24 @@ html.dark body::before {
   word-break: break-word;
 }
 
+/* Readable links inside syndicated post bodies & comments only
+   (scoped to single post content, list previews and other pages are untouched) */
+.article-content .mastodon-post-content a:not(.hashtag):not(.mention):not(.article-body-image-wrapper):not(:has(img)),
+.mastodon-comment-body a:not(.hashtag):not(.mention):not(:has(img)) {
+  color: rgb(var(--color-primary-500)) !important;
+  font-weight: 600;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(var(--color-primary-500), 0.5) !important;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.article-content .mastodon-post-content a:not(.hashtag):not(.mention):not(.article-body-image-wrapper):not(:has(img)):hover,
+.mastodon-comment-body a:not(.hashtag):not(.mention):not(:has(img)):hover {
+  text-decoration-color: rgb(var(--color-primary-500)) !important;
+}
+
 .mastodon-post-content .invisible,
 .mastodon-comment-body .invisible {
   display: none;

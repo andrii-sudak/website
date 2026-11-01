@@ -10,7 +10,25 @@ This project uses a dual licensing model::
         * **NonCommercial (NC):** You may not use the material for commercial purposes.
         * **NoDerivatives (ND):** If you remix, transform, or build upon the material, you may not distribute the modified material.
     * The full license text can be found here: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-* **Syndicated Content & Fediverse Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) and [Pixelfed](https://fotolibre.social/andrii-sudak) (via the Hugo Content Adapter in `/content/posts/_content.gotmpl`) and live user replies loaded from the Fediverse remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
+* **Syndicated Content & Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) (microblogging), [Pixelfed](https://fotolibre.social/andrii-sudak) (photography) and [DEV.to](https://dev.to/andrii-sudak) (long-form technical articles) via the Hugo Content Adapter in `/content/posts/_content.gotmpl`, as well as live user comments loaded from the Fediverse and DEV.to, remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
+
+## Syndicated Sources & Data Portability
+
+The site acts as an aggregator: no third-party content is committed by bots. Each source can additionally be backed by an optional local archive, which is merged with (and takes priority over) the live API data:
+
+| Source | Config (`params.toml`) | Optional archive |
+| --- | --- | --- |
+| Mastodon | `[mastodon]` | `data/mastodon/archive.json` (array of Mastodon status objects) |
+| Pixelfed | `[pixelfed]` | `data/pixelfed/archive.json` (array of Pixelfed status objects) |
+| DEV.to | `[devto]` | `data/devto/archive.json` (array of DEV.to article objects incl. `body_html`) |
+
+If a service shuts down or you migrate accounts, export your posts into the matching `archive.json` and they keep rendering at the same URLs (`/posts/<source>-<id>/`). A DEV.to backup can be created without an API key:
+
+```bash
+mkdir -p data/devto
+curl -s "https://dev.to/api/articles?username=andrii-sudak&per_page=1000" | jq -r '.[].id' \
+  | xargs -I{} curl -s "https://dev.to/api/articles/{}" | jq -s '.' > data/devto/archive.json
+```
 
 Please ensure you respect these distinctions when interacting with this repository's contents.
 

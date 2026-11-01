@@ -8,4 +8,9 @@
     {{- partial "icon.html" "pixelfed" -}}
     <span>Pixelfed</span>
   </span>
+{{- else if eq .Params.source "devto" -}}
+  <span class="mastodon-source-badge" title="Syndicated from DEV.to">
+    {{- partial "icon.html" "dev" -}}
+    <span>DEV.to</span>
+  </span>
 {{- end -}}

@@ -33,6 +33,11 @@ mainSections = ["posts"]
   username = "andrii-sudak"
   accountId = "958983952396242093"
 
+[devto]
+  instance = "https://dev.to"
+  username = "andrii-sudak"
+  accountId = "1250384"
+
 [author]
   name = "Andrii Sudak"
   image = "img/author.jpg"

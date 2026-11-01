@@ -23,6 +23,10 @@
             <span class="posts-filter__icon inline-flex items-center justify-center">
               {{- partial "icon.html" $lowerName -}}
             </span>
+          {{- else if or (eq $lowerName "dev.to") (eq $lowerName "devto") (eq $lowerName "dev") -}}
+            <span class="posts-filter__icon inline-flex items-center justify-center">
+              {{- partial "icon.html" "dev" -}}
+            </span>
           {{- end -}}
           <span>{{ $termPage.LinkTitle }}</span>
           <span class="posts-filter__count text-xs opacity-75">({{ len $taxonomy.Pages }})</span>

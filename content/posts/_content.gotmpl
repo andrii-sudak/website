@@ -1,12 +1,13 @@
 {{- /*
-  Hugo Content Adapter for Fediverse Syndication (Mastodon & Pixelfed)
-  --------------------------------------------------------------------
+  Hugo Content Adapter for Multi-Source Syndication (Mastodon, Pixelfed & DEV.to)
+  -------------------------------------------------------------------------------
   Dynamically generates native Hugo pages in /posts/ from:
     1. Mastodon: optional data/mastodon/archive.json + live [params.mastodon] API
     2. Pixelfed: optional data/pixelfed/archive.json + live [params.pixelfed] API
+    3. DEV.to:   optional data/devto/archive.json    + live [params.devto] API
 
-  Uses "mastodon-<id>" and "pixelfed-<id>" path namespaces so syndicated posts
-  never conflict with manual Markdown posts or each other.
+  Uses "mastodon-<id>", "pixelfed-<id>", and "devto-<id>" path namespaces so
+  syndicated posts never conflict with manual Markdown posts or each other.
 */ -}}
 
 {{- $mastoInstance := site.Params.mastodon.instance | default "https://infosec.exchange" | strings.TrimRight "/" -}}
@@ -18,6 +19,11 @@
 {{- $pfAccountId := site.Params.pixelfed.accountId | default "958983952396242093" -}}
 {{- $pfUsername := site.Params.pixelfed.username | default "andrii-sudak" -}}
 {{- $pfHost := replaceRE "^https?://" "" $pfInstance -}}
+
+{{- $devtoInstance := site.Params.devto.instance | default "https://dev.to" | strings.TrimRight "/" -}}
+{{- $devtoAccountId := site.Params.devto.accountId | default "1250384" -}}
+{{- $devtoUsername := site.Params.devto.username | default "andrii-sudak" -}}
+{{- $devtoHost := replaceRE "^https?://" "" $devtoInstance -}}
 
 {{- $entries := slice -}}
 {{- $seenKeys := dict -}}
@@ -152,7 +158,7 @@
   {{- end -}}
 {{- end -}}
 
-{{- /* 3. Filter to own root public posts and count posts per calendar day */ -}}
+{{- /* 3. Filter Fediverse statuses to own root public posts and count posts per calendar day */ -}}
 {{- $rootEntries := slice -}}
 {{- $dateCounts := dict -}}
 {{- range $entry := $entries -}}
@@ -169,7 +175,7 @@
   {{- end -}}
 {{- end -}}
 
-{{- /* 4. Register each status as a native Hugo page */ -}}
+{{- /* 4. Register each Fediverse status as a native Hugo page */ -}}
 {{- range $entry := $rootEntries -}}
   {{- $status := $entry.status -}}
   {{- $source := $entry.source -}}
@@ -260,7 +266,7 @@
     "hideFeatureImage" (not $hasFeatureImage)
     "showAuthor" false
     "showAuthorBottom" true
-    "showDate" true
+    "showDate" (eq ($createdAt.Format "2006-01-02") ($lastmod.Format "2006-01-02"))
     "showDateOnlyInArticle" true
     "showDateUpdated" true
     "showTaxonomies" false
@@ -284,6 +290,163 @@
   {{- $page := dict
     "kind" "page"
     "path" (printf "%s-%s" $source $id)
+    "title" $title
+    "dates" (dict
+      "date" $createdAt
+      "publishDate" $createdAt
+      "lastmod" $lastmod
+    )
+    "params" $params
+    "content" (dict
+      "mediaType" "text/markdown"
+      "value" $bodyHTML
+    )
+  -}}
+  {{- $.AddPage $page -}}
+{{- end -}}
+
+{{- /* 5A. Load DEV.to local archive (data/devto/archive.json) if present */ -}}
+{{- $devtoArticles := slice -}}
+{{- with hugo.Data.devto -}}
+  {{- with .archive -}}
+    {{- range . -}}
+      {{- $key := printf "devto-%d" (int .id) -}}
+      {{- if not (index $seenKeys $key) -}}
+        {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+        {{- $devtoArticles = $devtoArticles | append . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 5B. Fetch live public DEV.to articles + full body for each article */ -}}
+{{- $devtoListURL := printf "%s/api/articles?username=%s&per_page=100" $devtoInstance $devtoUsername -}}
+{{- with try (resources.GetRemote $devtoListURL) -}}
+  {{- with .Err -}}
+    {{- warnf "DEV.to content adapter: failed to fetch %s: %s" $devtoListURL . -}}
+  {{- else with .Value -}}
+    {{- $listItems := . | transform.Unmarshal -}}
+    {{- range $item := $listItems -}}
+      {{- $id := printf "%d" (int $item.id) -}}
+      {{- $key := printf "devto-%s" $id -}}
+      {{- if not (index $seenKeys $key) -}}
+        {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+        {{- $detailURL := printf "%s/api/articles/%s" $devtoInstance $id -}}
+        {{- with try (resources.GetRemote $detailURL) -}}
+          {{- with .Err -}}
+            {{- warnf "DEV.to content adapter: failed to fetch detail %s: %s" $detailURL . -}}
+            {{- $devtoArticles = $devtoArticles | append $item -}}
+          {{- else with .Value -}}
+            {{- $fullArticle := . | transform.Unmarshal -}}
+            {{- $devtoArticles = $devtoArticles | append $fullArticle -}}
+          {{- else -}}
+            {{- $devtoArticles = $devtoArticles | append $item -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 5C. Register each DEV.to article as a native Hugo page */ -}}
+{{- range $article := $devtoArticles -}}
+  {{- $id := printf "%d" (int $article.id) -}}
+  {{- $publishedStr := $article.published_at | default $article.created_at -}}
+  {{- $createdAt := time.AsTime $publishedStr -}}
+  {{- $lastmod := $createdAt -}}
+  {{- with $article.edited_at -}}
+    {{- $lastmod = time.AsTime . -}}
+  {{- end -}}
+
+  {{- $title := $article.title | default ($createdAt.Format "2006-01-02") -}}
+
+  {{- /* Extract tags (handling both slice and comma-separated string formats) */ -}}
+  {{- $tags := slice -}}
+  {{- if reflect.IsSlice $article.tags -}}
+    {{- range $article.tags -}}
+      {{- $tags = $tags | append (printf "%v" .) -}}
+    {{- end -}}
+  {{- else if reflect.IsSlice $article.tag_list -}}
+    {{- range $article.tag_list -}}
+      {{- $tags = $tags | append (printf "%v" .) -}}
+    {{- end -}}
+  {{- else if $article.tag_list -}}
+    {{- range (split (printf "%v" $article.tag_list) ",") -}}
+      {{- $t := strings.TrimSpace . -}}
+      {{- if ne $t "" -}}
+        {{- $tags = $tags | append $t -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $rawBody := $article.body_html | default "" -}}
+  {{- $featureImageURL := $article.cover_image | default "" -}}
+  {{- if eq $featureImageURL "" -}}
+    {{- $imgMatches := findRESubmatch `<img[^>]+src="([^"]+)"` $rawBody 1 -}}
+    {{- if gt (len $imgMatches) 0 -}}
+      {{- $firstMatch := index $imgMatches 0 -}}
+      {{- if gt (len $firstMatch) 1 -}}
+        {{- $featureImageURL = index $firstMatch 1 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* Strip inline images from card summary preview so text clamps cleanly */ -}}
+  {{- $cleanPreview := replaceRE `(?s)<a[^>]*class="[^"]*article-body-image-wrapper[^"]*"[^>]*>.*?</a>` "" $rawBody -}}
+  {{- $cleanPreview = replaceRE `<img[^>]*>` "" $cleanPreview -}}
+  {{- $cleanPreview = replaceRE `(<br\s*/?>\s*)+` " " $cleanPreview -}}
+  {{- $summaryText := $cleanPreview | plainify | htmlUnescape | strings.TrimSpace -}}
+  {{- if eq $summaryText "" -}}
+    {{- $summaryText = $article.description | default "" -}}
+    {{- $cleanPreview = printf "<p>%s</p>" ($summaryText | htmlEscape) -}}
+  {{- end -}}
+
+  {{- $bodyHTML := printf `<div class="mastodon-post-content devto-article-content">%s</div>` $rawBody -}}
+  {{- $postURL := $article.url | default (printf "%s/%s/%s" $devtoInstance $devtoUsername $id) -}}
+  {{- $hasFeatureImage := ne $featureImageURL "" -}}
+  {{- $commentsCount := $article.comments_count | default 0 -}}
+  {{- /* comments_count includes comments hidden by the author; count only visible ones */ -}}
+  {{- $commentsURL := printf "%s/api/comments?a_id=%s" $devtoInstance $id -}}
+  {{- with try (resources.GetRemote $commentsURL) -}}
+    {{- with .Value -}}
+      {{- $tree := . | transform.Unmarshal -}}
+      {{- $commentsCount = len (findRE `"id_code"` (jsonify $tree)) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $reactionsCount := $article.public_reactions_count | default ($article.positive_reactions_count | default 0) -}}
+
+  {{- $params := dict
+    "source" "devto"
+    "summary" $summaryText
+    "previewHTML" $cleanPreview
+    "featureimage" $featureImageURL
+    "hideFeatureImage" (not $hasFeatureImage)
+    "showAuthor" false
+    "showAuthorBottom" true
+    "showDate" (eq ($createdAt.Format "2006-01-02") ($lastmod.Format "2006-01-02"))
+    "showDateOnlyInArticle" false
+    "showDateUpdated" true
+    "showTaxonomies" false
+    "categories" (slice "DEV.to")
+    "tags" $tags
+    "mastodon" (dict
+      "source" "devto"
+      "instance" $devtoInstance
+      "host" $devtoHost
+      "username" $devtoUsername
+      "accountId" $devtoAccountId
+      "id" $id
+      "url" $postURL
+      "replies_count" $commentsCount
+      "reblogs_count" 0
+      "favourites_count" $reactionsCount
+      "initial_replies" "[]"
+    )
+  -}}
+
+  {{- $page := dict
+    "kind" "page"
+    "path" (printf "devto-%s" $id)
     "title" $title
     "dates" (dict
       "date" $createdAt

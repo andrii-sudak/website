@@ -29,10 +29,16 @@
         <h1 class="mt-0 mb-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
           {{ .Title | emojify }}
         </h1>
-        {{ if or (eq .Params.source "mastodon") (eq .Params.source "pixelfed") }}
-          {{ $isPixelfed := eq .Params.source "pixelfed" }}
-          {{ $iconName := cond $isPixelfed "pixelfed" "mastodon" }}
-          {{ $label := cond $isPixelfed "Pixelfed" "Mastodon" }}
+        {{ if or (eq .Params.source "mastodon") (eq .Params.source "pixelfed") (eq .Params.source "devto") }}
+          {{ $iconName := "mastodon" }}
+          {{ $label := "Mastodon" }}
+          {{ if eq .Params.source "pixelfed" }}
+            {{ $iconName = "pixelfed" }}
+            {{ $label = "Pixelfed" }}
+          {{ else if eq .Params.source "devto" }}
+            {{ $iconName = "dev" }}
+            {{ $label = "DEV.to" }}
+          {{ end }}
           {{ with .Params.mastodon.url }}
             <a href="{{ . }}" target="_blank" rel="noopener noreferrer" class="mastodon-source-badge not-prose" title="View original post on {{ $label }}">
               {{ partial "icon.html" $iconName }}
