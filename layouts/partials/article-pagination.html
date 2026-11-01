@@ -12,6 +12,7 @@
         <span class="flex flex-col">
           {{ if $prev }}
             <a
+              id="article-nav-prev"
               class="flex text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
               href="{{ $prev.RelPermalink }}">
               <span class="leading-6">
@@ -23,6 +24,7 @@
         <span class="flex flex-col items-end">
           {{ if $next }}
             <a
+              id="article-nav-next"
               class="flex text-right text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
               href="{{ $next.RelPermalink }}">
               <span class="leading-6">
@@ -33,5 +35,53 @@
         </span>
       </div>
     </div>
+    <script>
+      (function () {
+        const prevLink = document.getElementById('article-nav-prev');
+        const nextLink = document.getElementById('article-nav-next');
+        if (!prevLink && !nextLink) return;
+
+        let startX = 0;
+        let startY = 0;
+        let startTime = 0;
+        let ignoreSwipe = false;
+
+        document.addEventListener('touchstart', function (e) {
+          if (e.touches.length !== 1) {
+            ignoreSwipe = true;
+            return;
+          }
+          const target = e.target;
+          if (target && target.closest && target.closest('pre, code, table, input, textarea, video, audio')) {
+            ignoreSwipe = true;
+            return;
+          }
+          ignoreSwipe = false;
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          startTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', function (e) {
+          if (ignoreSwipe || e.changedTouches.length !== 1) return;
+          const elapsed = Date.now() - startTime;
+          if (elapsed > 600) return;
+
+          const selection = window.getSelection ? window.getSelection().toString() : '';
+          if (selection && selection.length > 0) return;
+
+          const dx = e.changedTouches[0].clientX - startX;
+          const dy = e.changedTouches[0].clientY - startY;
+
+          if (Math.abs(dx) >= 70 && Math.abs(dx) > Math.abs(dy) * 1.8) {
+            if (dx < 0 && nextLink && nextLink.href) {
+              window.location.href = nextLink.href;
+            } else if (dx > 0 && prevLink && prevLink.href) {
+              window.location.href = prevLink.href;
+            }
+          }
+        }, { passive: true });
+      })();
+    </script>
   {{ end }}
 {{ end }}
