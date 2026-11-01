@@ -88,14 +88,14 @@
           Open on my instance &rarr;
         </button>
       </form>
-      <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700 text-xs">
-        <div class="flex flex-wrap items-center gap-2">
-          <button type="button" id="fediverse-copy-uri" class="fediverse-secondary-btn px-3 py-1.5 rounded-lg font-semibold cursor-pointer">
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-neutral-200 dark:border-neutral-700 text-xs min-w-0">
+        <div class="flex items-center gap-2 min-w-0 max-w-full">
+          <button type="button" id="fediverse-copy-uri" class="fediverse-secondary-btn px-3 py-1.5 rounded-lg font-semibold cursor-pointer shrink-0">
             Copy post URI
           </button>
-          <span class="text-neutral-500 dark:text-neutral-400 mono truncate max-w-xs sm:max-w-md">{{ $postURL }}</span>
+          <span class="fediverse-uri-preview text-neutral-500 dark:text-neutral-400 mono">{{ $postURL }}</span>
         </div>
-        <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">
+        <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold shrink-0">
           Open original post &nearr;
         </a>
       </div>

@@ -296,6 +296,12 @@ html.dark body::before {
   z-index: 10;
 }
 
+.mastodon-post-content a,
+.mastodon-comment-body a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .mastodon-post-content .invisible,
 .mastodon-comment-body .invisible {
   display: none;
@@ -399,6 +405,17 @@ html.dark .mastodon-stats {
 
 .fediverse-reply-panel {
   padding: 1.25rem !important;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.fediverse-uri-preview {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fediverse-input {
