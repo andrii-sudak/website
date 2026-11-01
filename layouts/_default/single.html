@@ -47,6 +47,17 @@
           {{ end }}
         {{ end }}
       </div>
+      {{ with .Params.tags }}
+        <div class="flex flex-wrap items-center gap-1.5 mt-3 mb-2 not-prose print:hidden">
+          {{ range . }}
+            <a
+              href="{{ printf "/tags/%s/" (. | urlize) | relLangURL }}"
+              class="home-article-card__tag inline-flex items-center gap-1 hover:text-primary-500 hover:border-primary-500 transition-colors no-underline">
+              #{{ . }}
+            </a>
+          {{ end }}
+        </div>
+      {{ end }}
       {{ if not (.Params.showAuthorBottom | default (site.Params.article.showAuthorBottom | default false)) }}
         {{ template "SingleAuthor" . }}
       {{ end }}

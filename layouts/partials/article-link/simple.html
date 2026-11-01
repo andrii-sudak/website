@@ -136,6 +136,17 @@
           </div>
         {{ end }}
       {{ end }}
+      {{ with .Params.tags }}
+        <div class="flex flex-wrap items-center gap-1.5 mt-2 relative z-10 not-prose">
+          {{ range . }}
+            <a
+              href="{{ printf "/tags/%s/" (. | urlize) | relLangURL }}"
+              class="home-article-card__tag hover:text-primary-500 hover:border-primary-500 transition-colors no-underline">
+              #{{ . }}
+            </a>
+          {{ end }}
+        </div>
+      {{ end }}
     </div>
   </div>
 </article>

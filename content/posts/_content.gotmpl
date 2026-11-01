@@ -208,6 +208,9 @@
 
   {{- /* Build clean preview HTML and plain-text summary (stripping trailing hashtag-only paragraphs) */ -}}
   {{- $rawContent := $status.content | default "" -}}
+  {{- /* Rewrite Fediverse remote hashtag links to internal site /tags/<tag>/ */ -}}
+  {{- $rawContent = replaceRE `href="https?://[^/]+/tags/([^"/]+)"` `href="/tags/$1/"` $rawContent -}}
+  {{- $rawContent = replaceRE `target="_blank"\s+rel="tag"` `rel="tag"` $rawContent -}}
   {{- $summaryHTML := replaceRE `<p>(\s*<a[^>]*class="[^"]*hashtag[^"]*"[^>]*>#<span>[^<]+</span></a>\s*)+</p>\s*$` "" $rawContent -}}
   {{- $summaryText := $summaryHTML | plainify | htmlUnescape | strings.TrimSpace -}}
   {{- if eq $summaryText "" -}}
@@ -270,7 +273,7 @@
     "showDateOnlyInArticle" true
     "showDateUpdated" true
     "showTaxonomies" false
-    "categories" (slice $category)
+    "categories" (slice "Updates" $category)
     "tags" $tags
     "mastodon" (dict
       "source" $source
@@ -427,7 +430,7 @@
     "showDateOnlyInArticle" false
     "showDateUpdated" true
     "showTaxonomies" false
-    "categories" (slice "DEV.to")
+    "categories" (slice "Articles" "DEV.to")
     "tags" $tags
     "mastodon" (dict
       "source" "devto"

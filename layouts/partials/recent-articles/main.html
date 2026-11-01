@@ -1,9 +1,16 @@
-{{- $recentArticles := 5 -}}
-{{- $showMoreLinkDest := "/posts/" -}}
 {{- if .Site.Params.homepage.showRecent | default false -}}
-  {{- if index .Site.Params.homepage "showRecentItems" -}}
-    {{- $recentArticles = .Site.Params.homepage.showRecentItems -}}
+  {{- $allPosts := where .Site.RegularPages "Section" "posts" -}}
+  {{- $articles := slice -}}
+  {{- $updates := slice -}}
+
+  {{- range $allPosts -}}
+    {{- if or (eq .Params.source "devto") (not (in (slice "mastodon" "pixelfed") .Params.source)) -}}
+      {{- $articles = $articles | append . -}}
+    {{- else -}}
+      {{- $updates = $updates | append . -}}
+    {{- end -}}
   {{- end -}}
+
   <div class="home-section-divider my-10" aria-hidden="true">
     <svg class="home-section-divider__svg" viewBox="0 0 600 28" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
       <path d="M0 8 H210 L224 22 H376 L390 8 H600" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -11,25 +18,195 @@
     </svg>
   </div>
 
-  {{- if and .Site.Params.homepage.cardView (not .Site.Params.homepage.cardViewScreenWidth) | default false -}}
-    {{- partial "recent-articles/cardview.html" . -}}
-  {{- else if and .Site.Params.homepage.cardView .Site.Params.homepage.cardViewScreenWidth | default false -}}
-    {{- partial "recent-articles/cardview-fullwidth.html" . -}}
-  {{- else -}}
-    {{- partial "recent-articles/list.html" . -}}
-  {{- end -}}
+  <div class="home-activity w-full">
+    {{/* ---------------- LEFT: Featured Articles (DEV.to & long-reads) ---------------- */}}
+    <div class="home-activity__articles">
+      <div class="home-section-header">
+        <div class="home-section-header__title">
+          <span class="home-section-header__icon">
+            {{- partial "icon.html" "dev" -}}
+          </span>
+          <span>Articles</span>
+        </div>
+        <a href="{{ "/categories/articles/" | relLangURL }}" class="home-section-header__link">
+          All articles &rarr;
+        </a>
+      </div>
 
-  {{- if .Site.Params.homepage.showMoreLink | default false -}}
-    {{- if index .Site.Params.homepage "showRecentItems" -}}
-      {{- $showMoreLinkDest = .Site.Params.homepage.showMoreLinkDest -}}
-    {{- end -}}
-    <div class="mt-10 flex justify-center">
-      <a
-        href="{{ $showMoreLinkDest | relLangURL }}"
-        class="pagination-link pagination-link--active inline-flex items-center gap-2 px-5 py-2 font-bold rounded-lg no-underline">
-        <span>{{ i18n "recent.show_more" | markdownify }}</span>
-        <span>&rarr;</span>
-      </a>
+      <div class="flex flex-col gap-6">
+        {{- range first 3 $articles -}}
+          {{- $page := . -}}
+          {{- $featuredURL := .Params.featureimage | default "" -}}
+          <article class="home-article-card group">
+            {{- with $featuredURL -}}
+              <a href="{{ $page.RelPermalink }}" class="block overflow-hidden rounded-lg">
+                <img
+                  src="{{ . }}"
+                  alt="{{ $page.Title }}"
+                  loading="lazy"
+                  decoding="async"
+                  class="home-article-card__banner nozoom not-prose transition-transform duration-500 group-hover:scale-[1.02]" />
+              </a>
+            {{- end -}}
+
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span class="mastodon-source-badge" title="Published on DEV.to">
+                {{- partial "icon.html" "dev" -}}
+                <span>DEV.to</span>
+              </span>
+              {{- with .Lastmod | default .Date -}}
+                <span class="text-xs text-neutral-500 dark:text-neutral-400 mono">
+                  updated: {{ .Format "2006-01-02" }}
+                </span>
+              {{- end -}}
+            </div>
+
+            <h3 class="home-article-card__title">
+              <a href="{{ .RelPermalink }}" class="text-neutral-900 dark:text-neutral">
+                {{- .Title | emojify -}}
+              </a>
+            </h3>
+
+            {{- with .Params.tags -}}
+              <div class="flex flex-wrap gap-1.5 my-3 relative z-10">
+                {{- range . -}}
+                  <a
+                    href="{{ printf "/tags/%s/" (. | urlize) | relLangURL }}"
+                    class="home-article-card__tag hover:text-primary-500 hover:border-primary-500 transition-colors no-underline">
+                    #{{ . }}
+                  </a>
+                {{- end -}}
+              </div>
+            {{- end -}}
+
+            {{- with .Params.summary -}}
+              <p class="text-sm text-neutral-600 dark:text-neutral-300 mt-1 mb-4 line-clamp-3 leading-relaxed">
+                {{- . -}}
+              </p>
+            {{- end -}}
+
+            <div class="mt-auto pt-3 border-t border-neutral-200/60 dark:border-neutral-700/50 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+              <a href="{{ .RelPermalink }}" class="text-primary-500 font-bold hover:underline inline-flex items-center gap-1">
+                <span>Read article</span>
+                <span>&rarr;</span>
+              </a>
+              {{- with .Params.mastodon -}}
+                <div class="flex items-center gap-3">
+                  {{- if gt .favourites_count 0 -}}
+                    <span title="Reactions">★ {{ .favourites_count }}</span>
+                  {{- end -}}
+                  {{- if gt .replies_count 0 -}}
+                    <span title="Comments">💬 {{ .replies_count }}</span>
+                  {{- end -}}
+                </div>
+              {{- end -}}
+            </div>
+          </article>
+        {{- else -}}
+          <div class="p-6 text-sm text-neutral-500 dark:text-neutral-400 text-center rounded-lg border border-neutral-200 dark:border-neutral-700">
+            No long-form articles yet. Stay tuned!
+          </div>
+        {{- end -}}
+      </div>
     </div>
-  {{- end -}}
+
+    {{/* ---------------- RIGHT: Small Updates (Mastodon microblog & Pixelfed photos) ---------------- */}}
+    <div class="home-activity__updates">
+      <div class="home-section-header">
+        <div class="home-section-header__title">
+          <span class="home-section-header__icon">
+            {{- partial "icon.html" "fediverse" -}}
+          </span>
+          <span>Updates</span>
+        </div>
+        <a href="{{ "/categories/updates/" | relLangURL }}" class="home-section-header__link">
+          All updates &rarr;
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-3.5">
+        {{- range first 5 $updates -}}
+          {{- $page := . -}}
+          {{- $isPixelfed := eq .Params.source "pixelfed" -}}
+          {{- $iconName := cond $isPixelfed "pixelfed" "mastodon" -}}
+          {{- $label := cond $isPixelfed "Pixelfed" "Mastodon" -}}
+          {{- $thumbURL := .Params.featureimage | default "" -}}
+
+          <article class="home-update-card group">
+            <header class="flex items-center justify-between gap-2 mb-1.5">
+              <a href="{{ .RelPermalink }}" class="text-xs font-bold text-neutral-800 dark:text-neutral-100 hover:text-primary-500 transition-colors mono">
+                {{- .Title | emojify -}}
+              </a>
+              <span class="mastodon-source-badge text-[11px] py-0.5 px-2" title="{{ $label }}">
+                {{- partial "icon.html" $iconName -}}
+                <span>{{ $label }}</span>
+              </span>
+            </header>
+
+            <div class="flex items-start gap-3 mt-1">
+              {{- with $thumbURL -}}
+                <a href="{{ $page.RelPermalink }}" class="shrink-0 block overflow-hidden rounded-md">
+                  <img
+                    src="{{ . }}"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    class="home-update-card__thumb nozoom not-prose transition-transform duration-300 group-hover:scale-105" />
+                </a>
+              {{- end -}}
+              <div class="min-w-0 grow">
+                <p class="text-xs text-neutral-600 dark:text-neutral-300 m-0 line-clamp-3 leading-relaxed">
+                  {{- .Summary | plainify -}}
+                </p>
+              </div>
+            </div>
+          </article>
+        {{- end -}}
+      </div>
+    </div>
+  </div>
+
+  {{/* ---------------- Unified Footer: View all archive + Category pills ---------------- */}}
+  <div class="mt-10 pt-6 border-t border-neutral-200/50 dark:border-neutral-800 flex flex-col items-center gap-3">
+    <a
+      href="{{ "/posts/" | relLangURL }}"
+      class="pagination-link pagination-link--active inline-flex items-center gap-2 px-6 py-2.5 font-bold rounded-lg no-underline text-sm shadow-sm">
+      <span>View all posts & archive ({{ len $allPosts }})</span>
+      <span>&rarr;</span>
+    </a>
+
+    {{- $categories := site.Taxonomies.categories -}}
+    {{- if gt (len $categories) 0 -}}
+      <div class="flex flex-wrap items-center justify-center gap-2 text-xs mt-1">
+        {{- $order := slice "articles" "updates" "dev.to" "mastodon" "pixelfed" -}}
+        {{- range $slug := $order -}}
+          {{- with index $categories $slug -}}
+            {{- $taxonomy := . -}}
+            {{- $termPage := site.GetPage (printf "/categories/%s" $slug) -}}
+            {{- if $termPage -}}
+              {{- $icon := "" -}}
+              {{- if or (eq $slug "mastodon") (eq $slug "pixelfed") -}}
+                {{- $icon = $slug -}}
+              {{- else if or (eq $slug "dev.to") (eq $slug "articles") -}}
+                {{- $icon = "dev" -}}
+              {{- else if eq $slug "updates" -}}
+                {{- $icon = "fediverse" -}}
+              {{- end -}}
+              <a
+                href="{{ $termPage.RelPermalink }}"
+                class="pagination-link inline-flex items-center gap-1.5 px-3 py-1 text-xs no-underline">
+                {{- with $icon -}}
+                  <span class="inline-flex items-center justify-center w-3 h-3">
+                    {{- partial "icon.html" . -}}
+                  </span>
+                {{- end -}}
+                <span>{{ $termPage.LinkTitle }}</span>
+                <span class="opacity-75">({{ len $taxonomy.Pages }})</span>
+              </a>
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+      </div>
+    {{- end -}}
+  </div>
 {{- end -}}
