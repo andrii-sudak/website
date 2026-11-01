@@ -314,10 +314,26 @@ html.dark body::before {
 
 .mastodon-source-badge,
 .mastodon-author-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem !important;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none !important;
   background-color: rgb(var(--color-primary-500));
   color: rgb(var(--color-neutral-50)) !important;
   border-radius: 12px !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.mastodon-source-badge .icon,
+.mastodon-reply-btn .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mastodon-source-badge .icon svg,
@@ -325,12 +341,14 @@ html.dark body::before {
   width: 0.95rem !important;
   height: 0.95rem !important;
   fill: currentColor;
+  display: block;
 }
 
 .mastodon-comments-header .icon svg {
   width: 1.45rem !important;
   height: 1.45rem !important;
   fill: currentColor;
+  display: block;
 }
 
 html.dark .mastodon-source-badge,
@@ -341,6 +359,11 @@ html.dark .mastodon-author-pill {
 }
 
 .mastodon-reply-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem !important;
   background-color: rgb(var(--color-primary-500));
   color: rgb(var(--color-neutral-50)) !important;
   border-radius: 12px !important;

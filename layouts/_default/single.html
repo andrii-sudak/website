@@ -31,7 +31,7 @@
         </h1>
         {{ if eq .Params.source "mastodon" }}
           {{ with .Params.mastodon.url }}
-            <a href="{{ . }}" target="_blank" rel="noopener noreferrer" class="mastodon-source-badge not-prose inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-md" title="View original post in the Fediverse">
+            <a href="{{ . }}" target="_blank" rel="noopener noreferrer" class="mastodon-source-badge not-prose" title="View original post in the Fediverse">
               {{ partial "icon.html" "fediverse" }}
               <span>Fediverse</span>
             </a>

@@ -74,8 +74,8 @@
         <input
           type="text"
           id="fediverse-instance-input"
-          placeholder="your.instance.tld"
-          autocomplete="url"
+          placeholder="your-instance (e.g. all-is-well.com)"
+          autocomplete="off"
           aria-label="Your Fediverse instance domain"
           class="fediverse-input grow px-3 py-2 text-sm rounded-lg" />
         <button type="submit" class="mastodon-reply-btn px-4 py-2 text-sm font-bold rounded-lg cursor-pointer shrink-0">
@@ -143,8 +143,7 @@
       let popupTimer = null;
 
       try {
-        const savedInstance = localStorage.getItem('fediverse_instance');
-        if (savedInstance && instanceInput) instanceInput.value = savedInstance;
+        localStorage.removeItem('fediverse_instance');
       } catch (e) {}
 
       function toggleReplyPanel(forceOpen) {
@@ -215,9 +214,6 @@
             instanceInput.focus();
             return;
           }
-          try {
-            localStorage.setItem('fediverse_instance', domain);
-          } catch (err) {}
           const remoteUrl = 'https://' + domain + '/authorize_interaction?uri=' + encodeURIComponent(postUrl);
           openFediversePopup(remoteUrl);
         });
