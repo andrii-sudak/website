@@ -1,6 +1,11 @@
 {{- if eq .Params.source "mastodon" -}}
-  <span class="mastodon-source-badge" title="Syndicated from the Fediverse">
-    {{- partial "icon.html" "fediverse" -}}
-    <span>Fediverse</span>
+  <span class="mastodon-source-badge" title="Syndicated from Mastodon">
+    {{- partial "icon.html" "mastodon" -}}
+    <span>Mastodon</span>
+  </span>
+{{- else if eq .Params.source "pixelfed" -}}
+  <span class="mastodon-source-badge" title="Syndicated from Pixelfed">
+    {{- partial "icon.html" "pixelfed" -}}
+    <span>Pixelfed</span>
   </span>
 {{- end -}}

@@ -1,22 +1,26 @@
 {{- $mastodon := .Params.mastodon -}}
 {{- if and $mastodon $mastodon.id -}}
+  {{- $source := $mastodon.source | default (.Params.source | default "mastodon") -}}
   {{- $instance := $mastodon.instance | default (site.Params.mastodon.instance | default "https://infosec.exchange") | strings.TrimRight "/" -}}
   {{- $username := $mastodon.username | default (site.Params.mastodon.username | default "andrii_sudak") -}}
-  {{- $accountId := site.Params.mastodon.accountId | default "113526667200388301" -}}
+  {{- $accountId := $mastodon.accountId | default (site.Params.mastodon.accountId | default "113526667200388301") -}}
   {{- $statusId := printf "%v" $mastodon.id -}}
   {{- $postURL := $mastodon.url | default (printf "%s/@%s/%s" $instance $username $statusId) -}}
   {{- $repliesCount := $mastodon.replies_count | default 0 -}}
   {{- $reblogsCount := $mastodon.reblogs_count | default 0 -}}
   {{- $favouritesCount := $mastodon.favourites_count | default 0 -}}
+  {{- $initialReplies := $mastodon.initial_replies | default "[]" -}}
 
   <section
     id="mastodon-comments-section"
     class="mt-10 pt-8 border-t border-neutral-200 dark:border-neutral-700"
+    data-source="{{ $source }}"
     data-instance="{{ $instance }}"
     data-status-id="{{ $statusId }}"
     data-author-id="{{ $accountId }}"
     data-author-username="{{ $username }}"
-    data-post-url="{{ $postURL }}">
+    data-post-url="{{ $postURL }}"
+    data-initial-replies="{{ $initialReplies }}">
 
     <div class="mastodon-comments-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
@@ -27,7 +31,7 @@
           <span>Comments</span>
         </h2>
         <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1 mb-0">
-          Powered by the Fediverse. Reply from any compatible server or view the
+          Powered by the Fediverse (ActivityPub). Reply from any compatible server or view the
           <a href="{{ $postURL }}" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original post</a>.
         </p>
       </div>
@@ -122,12 +126,19 @@
       const section = document.getElementById('mastodon-comments-section');
       if (!section) return;
 
+      const source = section.dataset.source || 'mastodon';
       const instance = section.dataset.instance;
       const statusId = section.dataset.statusId;
       const authorId = section.dataset.authorId;
       const authorUsername = section.dataset.authorUsername;
       const postUrl = section.dataset.postUrl;
       const listEl = document.getElementById('mastodon-comments-list');
+
+      let initialReplies = [];
+      try {
+        const parsed = JSON.parse(section.dataset.initialReplies || '[]');
+        if (Array.isArray(parsed)) initialReplies = parsed;
+      } catch (e) {}
 
       const replyToggle = document.getElementById('fediverse-reply-toggle');
       const replyPanel = document.getElementById('fediverse-reply-panel');
@@ -401,8 +412,50 @@
         );
       }
 
+      function renderRepliesList(descendants) {
+        const publicReplies = (Array.isArray(descendants) ? descendants : []).filter(function (d) {
+          return d && (!d.visibility || d.visibility === 'public' || d.visibility === 'unlisted');
+        });
+
+        if (publicReplies.length === 0) {
+          listEl.innerHTML =
+            '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
+              'No comments yet. Be the first to <button type="button" id="fediverse-empty-reply-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">reply in the Fediverse</button>!' +
+            '</div>';
+          const emptyBtn = document.getElementById('fediverse-empty-reply-btn');
+          if (emptyBtn) {
+            emptyBtn.addEventListener('click', function () {
+              toggleReplyPanel(true);
+            });
+          }
+          return;
+        }
+
+        const knownIds = new Set(publicReplies.map(function (r) { return String(r.id); }));
+        const childrenMap = new Map();
+        const roots = [];
+
+        publicReplies.forEach(function (reply) {
+          const parentId = String(reply.in_reply_to_id || '');
+          if (!parentId || parentId === String(statusId) || !knownIds.has(parentId)) {
+            roots.push(reply);
+          } else {
+            if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
+            childrenMap.get(parentId).push(reply);
+          }
+        });
+
+        listEl.innerHTML = roots.map(function (root) {
+          return renderCommentNode(root, childrenMap, 0);
+        }).join('');
+      }
+
       function loadCommentsAndStats(bustCache) {
         const suffix = bustCache ? '?_=' + Date.now() : '';
+
+        if (source === 'pixelfed') {
+          renderRepliesList(initialReplies);
+        }
 
         fetch(instance + '/api/v1/statuses/' + encodeURIComponent(statusId) + suffix)
           .then(function (r) { return r.ok ? r.json() : null; })
@@ -411,7 +464,8 @@
             const rEl = document.getElementById('mastodon-stat-replies');
             const bEl = document.getElementById('mastodon-stat-reblogs');
             const fEl = document.getElementById('mastodon-stat-favourites');
-            if (rEl && typeof statusData.replies_count === 'number') rEl.textContent = statusData.replies_count;
+            const rCount = typeof statusData.replies_count === 'number' ? statusData.replies_count : statusData.reply_count;
+            if (rEl && typeof rCount === 'number') rEl.textContent = rCount;
             if (bEl && typeof statusData.reblogs_count === 'number') bEl.textContent = statusData.reblogs_count;
             if (fEl && typeof statusData.favourites_count === 'number') fEl.textContent = statusData.favourites_count;
           })
@@ -423,50 +477,13 @@
             return res.json();
           })
           .then(function (data) {
-            const descendants = Array.isArray(data && data.descendants) ? data.descendants : [];
-            const publicReplies = descendants.filter(function (d) {
-              return d && (d.visibility === 'public' || d.visibility === 'unlisted');
-            });
-
-            if (publicReplies.length === 0) {
-              listEl.innerHTML =
-                '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 text-center">' +
-                  'No comments yet. Be the first to <button type="button" id="fediverse-empty-reply-btn" class="underline font-semibold bg-transparent border-0 p-0 cursor-pointer text-inherit">reply in the Fediverse</button>!' +
-                '</div>';
-              const emptyBtn = document.getElementById('fediverse-empty-reply-btn');
-              if (emptyBtn) {
-                emptyBtn.addEventListener('click', function () {
-                  toggleReplyPanel(true);
-                });
-              }
-              return;
+            if (!data || !Array.isArray(data.descendants)) {
+              throw new Error('Invalid context payload');
             }
-
-            const knownIds = new Set(publicReplies.map(function (r) { return String(r.id); }));
-            const childrenMap = new Map();
-            const roots = [];
-
-            publicReplies.forEach(function (reply) {
-              const parentId = String(reply.in_reply_to_id || '');
-              if (!parentId || parentId === String(statusId) || !knownIds.has(parentId)) {
-                roots.push(reply);
-              } else {
-                if (!childrenMap.has(parentId)) childrenMap.set(parentId, []);
-                childrenMap.get(parentId).push(reply);
-              }
-            });
-
-            listEl.innerHTML = roots.map(function (root) {
-              return renderCommentNode(root, childrenMap, 0);
-            }).join('');
+            renderRepliesList(data.descendants);
           })
           .catch(function () {
-            if (!bustCache) {
-              listEl.innerHTML =
-                '<div class="mastodon-comments-empty p-5 rounded-lg text-sm text-neutral-500 dark:text-neutral-400">' +
-                  'Could not load live replies right now. View the discussion directly on the <a href="' + escapeHtml(postUrl) + '" target="_blank" rel="noopener noreferrer" class="underline font-semibold">original Fediverse post</a>.' +
-                '</div>';
-            }
+            renderRepliesList(initialReplies);
           });
       }
 

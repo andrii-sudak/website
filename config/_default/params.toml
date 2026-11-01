@@ -28,6 +28,11 @@ mainSections = ["posts"]
   username = "andrii_sudak"
   accountId = "113526667200388301"
 
+[pixelfed]
+  instance = "https://fotolibre.social"
+  username = "andrii-sudak"
+  accountId = "958983952396242093"
+
 [author]
   name = "Andrii Sudak"
   image = "img/author.jpg"

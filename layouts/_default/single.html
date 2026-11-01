@@ -29,11 +29,14 @@
         <h1 class="mt-0 mb-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
           {{ .Title | emojify }}
         </h1>
-        {{ if eq .Params.source "mastodon" }}
+        {{ if or (eq .Params.source "mastodon") (eq .Params.source "pixelfed") }}
+          {{ $isPixelfed := eq .Params.source "pixelfed" }}
+          {{ $iconName := cond $isPixelfed "pixelfed" "mastodon" }}
+          {{ $label := cond $isPixelfed "Pixelfed" "Mastodon" }}
           {{ with .Params.mastodon.url }}
-            <a href="{{ . }}" target="_blank" rel="noopener noreferrer" class="mastodon-source-badge not-prose" title="View original post in the Fediverse">
-              {{ partial "icon.html" "fediverse" }}
-              <span>Fediverse</span>
+            <a href="{{ . }}" target="_blank" rel="noopener noreferrer" class="mastodon-source-badge not-prose" title="View original post on {{ $label }}">
+              {{ partial "icon.html" $iconName }}
+              <span>{{ $label }}</span>
             </a>
           {{ end }}
         {{ end }}

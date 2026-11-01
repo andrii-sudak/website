@@ -10,7 +10,7 @@ This project uses a dual licensing model::
         * **NonCommercial (NC):** You may not use the material for commercial purposes.
         * **NoDerivatives (ND):** If you remix, transform, or build upon the material, you may not distribute the modified material.
     * The full license text can be found here: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-* **Syndicated Content & Fediverse Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) (via the Hugo Content Adapter in `/content/posts/_content.gotmpl`) and live user replies loaded from the Fediverse remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
+* **Syndicated Content & Fediverse Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) and [Pixelfed](https://fotolibre.social/andrii-sudak) (via the Hugo Content Adapter in `/content/posts/_content.gotmpl`) and live user replies loaded from the Fediverse remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
 
 Please ensure you respect these distinctions when interacting with this repository's contents.
 

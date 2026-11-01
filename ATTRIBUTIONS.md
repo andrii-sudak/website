@@ -39,6 +39,14 @@ The original logo was modified for use on this website. The changes include conv
 * **Modifications:** The original logo's color has been adapted to `currentColor` to ensure visual consistency and accessibility across different site themes (e.g., light and dark modes). This adaptation is solely for thematic integration on this specific website.
 * This project/website is not affiliated with, sponsored, or endorsed by Meta Platforms, Inc. All rights to the Messenger brand and logo are reserved by Meta Platforms, Inc.
 
+## Pixelfed Logo
+
+* **Asset File Path in this Repository:** `/assets/icons/pixelfed.svg`
+* **Source:** [Simple Icons - Pixelfed](https://github.com/simple-icons/simple-icons/blob/develop/icons/pixelfed.svg) / [Pixelfed Project](https://pixelfed.org/)
+* **License:** The SVG icon representation from Simple Icons is dedicated to the public domain under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/), and the upstream Pixelfed project is licensed under the [AGPL-3.0 License](https://github.com/pixelfed/pixelfed/blob/dev/LICENSE).
+* **Modifications:** The monochrome glyph uses `currentColor` for visual consistency across light and dark site themes.
+* This project/website is not affiliated with, sponsored, or endorsed by Pixelfed. All rights to the Pixelfed name and brand are reserved by their respective owners.
+
 ## Typography
 
 * **System Fonts:** Verdana (Microsoft) and Monaco (Apple) are used as primary system fonts when available on the user's device.

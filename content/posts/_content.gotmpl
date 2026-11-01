@@ -1,41 +1,54 @@
 {{- /*
-  Hugo Content Adapter for Mastodon Syndication
-  ---------------------------------------------
+  Hugo Content Adapter for Fediverse Syndication (Mastodon & Pixelfed)
+  --------------------------------------------------------------------
   Dynamically generates native Hugo pages in /posts/ from:
-    1. Optional local archive at data/mastodon/archive.json (for account migrations/backups)
-    2. Live public Mastodon API configured under [params.mastodon] in params.toml
+    1. Mastodon: optional data/mastodon/archive.json + live [params.mastodon] API
+    2. Pixelfed: optional data/pixelfed/archive.json + live [params.pixelfed] API
 
-  Uses the "mastodon-<id>" path namespace so it never conflicts with manual Markdown
-  posts in content/posts/ or additional feed adapters added in the future.
+  Uses "mastodon-<id>" and "pixelfed-<id>" path namespaces so syndicated posts
+  never conflict with manual Markdown posts or each other.
 */ -}}
 
-{{- $instance := site.Params.mastodon.instance | default "https://infosec.exchange" | strings.TrimRight "/" -}}
-{{- $accountId := site.Params.mastodon.accountId | default "113526667200388301" -}}
-{{- $username := site.Params.mastodon.username | default "andrii_sudak" -}}
-{{- $host := replaceRE "^https?://" "" $instance -}}
+{{- $mastoInstance := site.Params.mastodon.instance | default "https://infosec.exchange" | strings.TrimRight "/" -}}
+{{- $mastoAccountId := site.Params.mastodon.accountId | default "113526667200388301" -}}
+{{- $mastoUsername := site.Params.mastodon.username | default "andrii_sudak" -}}
+{{- $mastoHost := replaceRE "^https?://" "" $mastoInstance -}}
 
-{{- $allStatuses := slice -}}
-{{- $seenIds := dict -}}
+{{- $pfInstance := site.Params.pixelfed.instance | default "https://fotolibre.social" | strings.TrimRight "/" -}}
+{{- $pfAccountId := site.Params.pixelfed.accountId | default "958983952396242093" -}}
+{{- $pfUsername := site.Params.pixelfed.username | default "andrii-sudak" -}}
+{{- $pfHost := replaceRE "^https?://" "" $pfInstance -}}
 
-{{- /* 1. Load from local archive (data/mastodon/archive.json) if present */ -}}
+{{- $entries := slice -}}
+{{- $seenKeys := dict -}}
+
+{{- /* 1A. Load Mastodon local archive (data/mastodon/archive.json) if present */ -}}
 {{- with hugo.Data.mastodon -}}
   {{- with .archive -}}
     {{- range . -}}
-      {{- $id := printf "%v" .id -}}
-      {{- if not (index $seenIds $id) -}}
-        {{- $seenIds = merge $seenIds (dict $id true) -}}
-        {{- $allStatuses = $allStatuses | append . -}}
+      {{- $key := printf "mastodon-%v" .id -}}
+      {{- if not (index $seenKeys $key) -}}
+        {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+        {{- $entries = $entries | append (dict
+          "source" "mastodon"
+          "category" "Mastodon"
+          "instance" $mastoInstance
+          "host" $mastoHost
+          "username" $mastoUsername
+          "accountId" $mastoAccountId
+          "status" .
+        ) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
 
-{{- /* 2. Fetch live public statuses from Mastodon API (up to 5 pages x 40 items) */ -}}
+{{- /* 1B. Fetch live public Mastodon statuses (up to 5 pages x 40 items) */ -}}
 {{- $maxId := "" -}}
 {{- $keepFetching := true -}}
 {{- range seq 1 5 -}}
   {{- if $keepFetching -}}
-    {{- $apiURL := printf "%s/api/v1/accounts/%s/statuses?exclude_replies=true&exclude_reblogs=true&limit=40" $instance $accountId -}}
+    {{- $apiURL := printf "%s/api/v1/accounts/%s/statuses?exclude_replies=true&exclude_reblogs=true&limit=40" $mastoInstance $mastoAccountId -}}
     {{- if ne $maxId "" -}}
       {{- $apiURL = printf "%s&max_id=%s" $apiURL $maxId -}}
     {{- end -}}
@@ -49,9 +62,18 @@
           {{- range $pageStatuses -}}
             {{- $id := printf "%v" .id -}}
             {{- $maxId = $id -}}
-            {{- if not (index $seenIds $id) -}}
-              {{- $seenIds = merge $seenIds (dict $id true) -}}
-              {{- $allStatuses = $allStatuses | append . -}}
+            {{- $key := printf "mastodon-%s" $id -}}
+            {{- if not (index $seenKeys $key) -}}
+              {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+              {{- $entries = $entries | append (dict
+                "source" "mastodon"
+                "category" "Mastodon"
+                "instance" $mastoInstance
+                "host" $mastoHost
+                "username" $mastoUsername
+                "accountId" $mastoAccountId
+                "status" .
+              ) -}}
             {{- end -}}
           {{- end -}}
           {{- if lt (len $pageStatuses) 40 -}}
@@ -65,16 +87,82 @@
   {{- end -}}
 {{- end -}}
 
-{{- /* 3. Filter to own root public posts (exclude self-replies and non-public statuses) */ -}}
-{{- $rootStatuses := slice -}}
+{{- /* 2A. Load Pixelfed local archive (data/pixelfed/archive.json) if present */ -}}
+{{- with hugo.Data.pixelfed -}}
+  {{- with .archive -}}
+    {{- range . -}}
+      {{- $key := printf "pixelfed-%v" .id -}}
+      {{- if not (index $seenKeys $key) -}}
+        {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+        {{- $entries = $entries | append (dict
+          "source" "pixelfed"
+          "category" "Pixelfed"
+          "instance" $pfInstance
+          "host" $pfHost
+          "username" $pfUsername
+          "accountId" $pfAccountId
+          "status" .
+        ) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 2B. Fetch live public Pixelfed statuses */ -}}
+{{- $pfMaxId := "" -}}
+{{- $pfKeepFetching := true -}}
+{{- range seq 1 5 -}}
+  {{- if $pfKeepFetching -}}
+    {{- $pfURL := printf "%s/api/pixelfed/v1/accounts/%s/statuses?only_media=true" $pfInstance $pfAccountId -}}
+    {{- if ne $pfMaxId "" -}}
+      {{- $pfURL = printf "%s&max_id=%s" $pfURL $pfMaxId -}}
+    {{- end -}}
+    {{- with try (resources.GetRemote $pfURL) -}}
+      {{- with .Err -}}
+        {{- warnf "Pixelfed content adapter: failed to fetch %s: %s" $pfURL . -}}
+        {{- $pfKeepFetching = false -}}
+      {{- else with .Value -}}
+        {{- $pfStatuses := . | transform.Unmarshal -}}
+        {{- if gt (len $pfStatuses) 0 -}}
+          {{- range $pfStatuses -}}
+            {{- $id := printf "%v" .id -}}
+            {{- $pfMaxId = $id -}}
+            {{- $key := printf "pixelfed-%s" $id -}}
+            {{- if not (index $seenKeys $key) -}}
+              {{- $seenKeys = merge $seenKeys (dict $key true) -}}
+              {{- $entries = $entries | append (dict
+                "source" "pixelfed"
+                "category" "Pixelfed"
+                "instance" $pfInstance
+                "host" $pfHost
+                "username" $pfUsername
+                "accountId" $pfAccountId
+                "status" .
+              ) -}}
+            {{- end -}}
+          {{- end -}}
+          {{- if lt (len $pfStatuses) 9 -}}
+            {{- $pfKeepFetching = false -}}
+          {{- end -}}
+        {{- else -}}
+          {{- $pfKeepFetching = false -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 3. Filter to own root public posts and count posts per calendar day */ -}}
+{{- $rootEntries := slice -}}
 {{- $dateCounts := dict -}}
-{{- range $allStatuses -}}
-  {{- $isPublic := eq .visibility "public" -}}
-  {{- $isNotReblog := not .reblog -}}
-  {{- $isNotReply := not .in_reply_to_id -}}
+{{- range $entry := $entries -}}
+  {{- $s := $entry.status -}}
+  {{- $isPublic := eq $s.visibility "public" -}}
+  {{- $isNotReblog := not $s.reblog -}}
+  {{- $isNotReply := not $s.in_reply_to_id -}}
   {{- if and $isPublic $isNotReblog $isNotReply -}}
-    {{- $rootStatuses = $rootStatuses | append . -}}
-    {{- $createdAt := time.AsTime .created_at -}}
+    {{- $rootEntries = $rootEntries | append $entry -}}
+    {{- $createdAt := time.AsTime $s.created_at -}}
     {{- $dayKey := $createdAt.Format "2006-01-02" -}}
     {{- $currentCount := index $dateCounts $dayKey | default 0 -}}
     {{- $dateCounts = merge $dateCounts (dict $dayKey (add $currentCount 1)) -}}
@@ -82,7 +170,15 @@
 {{- end -}}
 
 {{- /* 4. Register each status as a native Hugo page */ -}}
-{{- range $status := $rootStatuses -}}
+{{- range $entry := $rootEntries -}}
+  {{- $status := $entry.status -}}
+  {{- $source := $entry.source -}}
+  {{- $category := $entry.category -}}
+  {{- $instance := $entry.instance -}}
+  {{- $host := $entry.host -}}
+  {{- $username := $entry.username -}}
+  {{- $accountId := $entry.accountId -}}
+
   {{- $id := printf "%v" $status.id -}}
   {{- $createdAt := time.AsTime $status.created_at -}}
   {{- $lastmod := $createdAt -}}
@@ -105,15 +201,19 @@
   {{- end -}}
 
   {{- /* Build clean preview HTML and plain-text summary (stripping trailing hashtag-only paragraphs) */ -}}
-  {{- $summaryHTML := replaceRE `<p>(\s*<a[^>]*class="[^"]*hashtag[^"]*"[^>]*>#<span>[^<]+</span></a>\s*)+</p>\s*$` "" $status.content -}}
+  {{- $rawContent := $status.content | default "" -}}
+  {{- $summaryHTML := replaceRE `<p>(\s*<a[^>]*class="[^"]*hashtag[^"]*"[^>]*>#<span>[^<]+</span></a>\s*)+</p>\s*$` "" $rawContent -}}
   {{- $summaryText := $summaryHTML | plainify | htmlUnescape | strings.TrimSpace -}}
   {{- if eq $summaryText "" -}}
-    {{- $summaryHTML = $status.content -}}
-    {{- $summaryText = $status.content | plainify | htmlUnescape | strings.TrimSpace -}}
+    {{- $summaryHTML = $rawContent -}}
+    {{- $summaryText = $rawContent | plainify | htmlUnescape | strings.TrimSpace -}}
   {{- end -}}
 
   {{- /* Build post HTML body + attached media + extract preview thumbnail if present */ -}}
-  {{- $bodyHTML := printf `<div class="mastodon-post-content">%s</div>` $status.content -}}
+  {{- $bodyHTML := "" -}}
+  {{- if ne (strings.TrimSpace $rawContent) "" -}}
+    {{- $bodyHTML = printf `<div class="mastodon-post-content">%s</div>` $rawContent -}}
+  {{- end -}}
   {{- $featureImageURL := "" -}}
 
   {{- with $status.media_attachments -}}
@@ -127,7 +227,7 @@
             {{- $featureImageURL = .preview_url | default "" -}}
           {{- end -}}
         {{- end -}}
-        {{- $desc := .description | default "Attached media from Mastodon" | htmlEscape -}}
+        {{- $desc := .description | default (printf "Attached media from %s" $category) | htmlEscape -}}
         {{- if eq .type "image" -}}
           {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><a href="%s" target="_blank" rel="noopener noreferrer"><img src="%s" alt="%s" loading="lazy" decoding="async" class="rounded-lg max-h-[600px] w-auto mx-auto" /></a></figure>` $mediaItems .url .url $desc -}}
         {{- else if or (eq .type "gifv") (eq .type "video") -}}
@@ -143,11 +243,17 @@
     {{- end -}}
   {{- end -}}
 
-  {{- $postURL := $status.url | default (printf "%s/@%s/%s" $instance $username $id) -}}
+  {{- $defaultPostURL := cond (eq $source "pixelfed") (printf "%s/p/%s/%s" $instance $username $id) (printf "%s/@%s/%s" $instance $username $id) -}}
+  {{- $postURL := $status.url | default $defaultPostURL -}}
   {{- $hasFeatureImage := ne $featureImageURL "" -}}
+  {{- $repliesCount := $status.replies_count | default ($status.reply_count | default 0) -}}
+  {{- $initialRepliesJSON := "[]" -}}
+  {{- with $status.replies -}}
+    {{- $initialRepliesJSON = . | jsonify -}}
+  {{- end -}}
 
   {{- $params := dict
-    "source" "mastodon"
+    "source" $source
     "summary" $summaryText
     "previewHTML" $summaryHTML
     "featureimage" $featureImageURL
@@ -158,23 +264,26 @@
     "showDateOnlyInArticle" true
     "showDateUpdated" true
     "showTaxonomies" false
-    "categories" (slice "Mastodon")
+    "categories" (slice $category)
     "tags" $tags
     "mastodon" (dict
+      "source" $source
       "instance" $instance
       "host" $host
       "username" $username
+      "accountId" $accountId
       "id" $id
       "url" $postURL
-      "replies_count" ($status.replies_count | default 0)
+      "replies_count" $repliesCount
       "reblogs_count" ($status.reblogs_count | default 0)
       "favourites_count" ($status.favourites_count | default 0)
+      "initial_replies" $initialRepliesJSON
     )
   -}}
 
   {{- $page := dict
     "kind" "page"
-    "path" (printf "mastodon-%s" $id)
+    "path" (printf "%s-%s" $source $id)
     "title" $title
     "dates" (dict
       "date" $createdAt
