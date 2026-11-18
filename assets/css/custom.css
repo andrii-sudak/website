@@ -789,3 +789,22 @@ html.dark .home-update-card:hover {
   object-fit: cover;
   flex-shrink: 0;
 }
+
+/* Muted styling for suspended contact links */
+li:has(.contact-suspended),
+.contact-suspended,
+.contact-suspended a {
+  color: rgb(var(--color-neutral-500)) !important;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+li:has(.contact-suspended) .contact-suspended,
+li:has(.contact-suspended) .contact-suspended a {
+  opacity: 1;
+}
+
+li:has(.contact-suspended):hover,
+.contact-suspended:hover {
+  opacity: 0.85;
+}

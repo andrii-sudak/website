@@ -1,6 +1,6 @@
 ---
 title: "Contact"
-date: 2026-11-01T00:16:00+01:00
+date: 2026-11-18T22:13:00+01:00
 draft: false
 showAuthor: false
 showReadingTime: false
@@ -39,8 +39,9 @@ I don't use these services for messaging. Please use the services listed above.
 *   {{< icon "linkedin" >}} [LinkedIn](https://www.linkedin.com/in/andrii-sudak) – Work-related communication and business
 *   {{< icon "codeberg" >}} [Codeberg](https://codeberg.org/andrii-sudak) – Mirror Git
 *   {{< icon "mastodon" >}} [Mastodon](https://infosec.exchange/@andrii_sudak) – Casual blog
-*   {{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) – Work-related communication and business
-*   {{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) – Work-related communication and business
+*   {{< icon "pixelfed" >}} [Pixelfed](https://gram.social/andrii-sudak) – Personal moments
 *   {{< icon "youtube" >}} [YouTube](https://www.youtube.com/channel/UCKJLt9NowBWdYODu7Zc3UYA) – Under development
 *   {{< icon "gitlab" >}} [GitLab](https://gitlab.com/andrii-sudak) – Mirror Git
 *   {{< icon "github" >}} [GitHub](https://github.com/andrii-sudak) – Primary Git
+*   <span class="contact-suspended">{{< icon "instagram" >}} [Instagram](https://www.instagram.com/andrii_sudak) – Suspended</span>
+*   <span class="contact-suspended">{{< icon "facebook" >}} [Facebook](https://www.facebook.com/andriisudak) – Suspended</span>
