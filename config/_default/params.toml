@@ -29,9 +29,9 @@ mainSections = ["posts"]
   accountId = "113526667200388301"
 
 [pixelfed]
-  instance = "https://fotolibre.social"
+  instance = "https://gram.social"
   username = "andrii-sudak"
-  accountId = "958983952396242093"
+  accountId = "1028069983218190198"
 
 [devto]
   instance = "https://dev.to"

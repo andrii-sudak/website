@@ -10,7 +10,7 @@ This project uses a dual licensing model::
         * **NonCommercial (NC):** You may not use the material for commercial purposes.
         * **NoDerivatives (ND):** If you remix, transform, or build upon the material, you may not distribute the modified material.
     * The full license text can be found here: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-* **Syndicated Content & Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) (microblogging), [Pixelfed](https://fotolibre.social/andrii-sudak) (photography) and [DEV.to](https://dev.to/andrii-sudak) (long-form technical articles) via the Hugo Content Adapter in `/content/posts/_content.gotmpl`, as well as live user comments loaded from the Fediverse and DEV.to, remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
+* **Syndicated Content & Comments:** Posts dynamically syndicated at build time from [Mastodon](https://infosec.exchange/@andrii_sudak) (microblogging), [Pixelfed](https://gram.social/andrii-sudak) (photography) and [DEV.to](https://dev.to/andrii-sudak) (long-form technical articles) via the Hugo Content Adapter in `/content/posts/_content.gotmpl`, as well as live user comments loaded from the Fediverse and DEV.to, remain subject to their respective authors' rights. Any third-party media, links, or trademarks referenced in syndicated posts or comments belong to their respective owners and are not stored in this repository.
 
 ## Syndicated Sources & Data Portability
 

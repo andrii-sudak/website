@@ -15,8 +15,8 @@
 {{- $mastoUsername := site.Params.mastodon.username | default "andrii_sudak" -}}
 {{- $mastoHost := replaceRE "^https?://" "" $mastoInstance -}}
 
-{{- $pfInstance := site.Params.pixelfed.instance | default "https://fotolibre.social" | strings.TrimRight "/" -}}
-{{- $pfAccountId := site.Params.pixelfed.accountId | default "958983952396242093" -}}
+{{- $pfInstance := site.Params.pixelfed.instance | default "https://gram.social" | strings.TrimRight "/" -}}
+{{- $pfAccountId := site.Params.pixelfed.accountId | default "1028069983218190198" -}}
 {{- $pfUsername := site.Params.pixelfed.username | default "andrii-sudak" -}}
 {{- $pfHost := replaceRE "^https?://" "" $pfInstance -}}
 
@@ -208,8 +208,8 @@
 
   {{- /* Build clean preview HTML and plain-text summary (stripping trailing hashtag-only paragraphs) */ -}}
   {{- $rawContent := $status.content | default "" -}}
-  {{- /* Rewrite Fediverse remote hashtag links to internal site /tags/<tag>/ */ -}}
-  {{- $rawContent = replaceRE `href="https?://[^/]+/tags/([^"/]+)"` `href="/tags/$1/"` $rawContent -}}
+  {{- /* Rewrite Fediverse remote hashtag links (Mastodon /tags/... and Pixelfed /discover/tags/...) to internal site /tags/<tag>/ */ -}}
+  {{- $rawContent = replaceRE `href="https?://[^/]+/(?:discover/)?tags/([^"?/]+)(?:\?[^"]*)?"` `href="/tags/$1/"` $rawContent -}}
   {{- $rawContent = replaceRE `target="_blank"\s+rel="tag"` `rel="tag"` $rawContent -}}
   {{- $summaryHTML := replaceRE `<p>(\s*<a[^>]*class="[^"]*hashtag[^"]*"[^>]*>#<span>[^<]+</span></a>\s*)+</p>\s*$` "" $rawContent -}}
   {{- $summaryText := $summaryHTML | plainify | htmlUnescape | strings.TrimSpace -}}
