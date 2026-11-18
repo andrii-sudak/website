@@ -808,3 +808,97 @@ li:has(.contact-suspended):hover,
 .contact-suspended:hover {
   opacity: 0.85;
 }
+
+/* --------------------------------------------------------------------------
+   Pixelfed 3-Column Photo Gallery (/categories/pixelfed/)
+   -------------------------------------------------------------------------- */
+.pixelfed-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .pixelfed-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .pixelfed-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pixelfed-gallery__card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 12px !important;
+  background-color: rgba(var(--color-neutral-100), 0.55);
+  border: 1px solid rgba(var(--color-neutral-200), 0.45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.pixelfed-gallery__card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--color-primary-500), 0.55);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+}
+
+html.dark .pixelfed-gallery__card {
+  background-color: rgba(var(--color-neutral-900), 0.65);
+  border: 1px solid rgba(var(--color-neutral-700), 0.4);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .pixelfed-gallery__card:hover {
+  border-color: rgba(var(--color-primary-500), 0.65);
+  box-shadow: 6px 6px 22px rgba(0, 0, 0, 0.45);
+}
+
+.pixelfed-gallery__image-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.pixelfed-gallery__img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+  margin: 0 !important;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pixelfed-gallery__card:hover .pixelfed-gallery__img {
+  transform: scale(1.04);
+}
+
+.pixelfed-gallery__meta {
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.pixelfed-gallery__date {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgb(var(--color-neutral-800));
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+}
+
+.pixelfed-gallery__date:hover {
+  color: rgb(var(--color-primary-500)) !important;
+}
+
+html.dark .pixelfed-gallery__date {
+  color: rgb(var(--color-neutral-100));
+}

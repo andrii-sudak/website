@@ -35,11 +35,62 @@
   </section>
 
   {{ if gt .Pages 0 }}
+    {{ $isPixelfedCategory := and (eq .Data.Plural "categories") (eq (lower .Data.Term) "pixelfed") }}
     {{ $cardView := .Params.cardView | default (site.Params.term.cardView | default false) }}
     {{ $cardViewScreenWidth := site.Params.term.cardViewScreenWidth | default false }}
     {{ $groupByYear := .Params.groupByYear | default (site.Params.term.groupByYear | default (site.Params.list.groupByYear | default true)) }}
 
-    {{ if not $cardView }}
+    {{ if $isPixelfedCategory }}
+      <section class="w-full">
+        {{ range (.Paginate (.Pages.GroupByDate "2006") 12).PageGroups }}
+          {{ if $groupByYear }}
+            <h2 class="mt-12 mb-4 text-2xl font-bold text-neutral-700 first:mt-8 dark:text-neutral-300">
+              {{ .Key }}
+            </h2>
+          {{ end }}
+          <div class="pixelfed-gallery">
+            {{ range .Pages }}
+              {{ $page := . }}
+              {{ $imgURL := .Params.featureimage | default "" }}
+              <article class="pixelfed-gallery__card group">
+                <a href="{{ .RelPermalink }}" class="pixelfed-gallery__image-wrap" aria-label="{{ .Title }}">
+                  {{ with $imgURL }}
+                    <img
+                      src="{{ . }}"
+                      alt="{{ $page.Title }}"
+                      loading="lazy"
+                      decoding="async"
+                      class="pixelfed-gallery__img nozoom not-prose" />
+                  {{ end }}
+                </a>
+                <div class="pixelfed-gallery__meta">
+                  <div class="flex items-center justify-between gap-2">
+                    <a href="{{ .RelPermalink }}" class="pixelfed-gallery__date mono">
+                      {{ .Title | emojify }}
+                    </a>
+                    <span class="mastodon-source-badge" title="Syndicated from Pixelfed">
+                      {{- partial "icon.html" "pixelfed" -}}
+                      <span>Pixelfed</span>
+                    </span>
+                  </div>
+                  {{ with .Params.tags }}
+                    <div class="flex flex-wrap items-center gap-1.5 mt-2 relative z-10 not-prose">
+                      {{ range . }}
+                        <a
+                          href="{{ printf "/tags/%s/" (. | urlize) | relLangURL }}"
+                          class="home-article-card__tag hover:text-primary-500 hover:border-primary-500 transition-colors no-underline">
+                          #{{ . }}
+                        </a>
+                      {{ end }}
+                    </div>
+                  {{ end }}
+                </div>
+              </article>
+            {{ end }}
+          </div>
+        {{ end }}
+      </section>
+    {{ else if not $cardView }}
       <section class="space-y-10 w-full">
         {{ range (.Paginate (.Pages.GroupByDate "2006")).PageGroups }}
           {{ if $groupByYear }}
