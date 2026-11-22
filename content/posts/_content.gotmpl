@@ -230,10 +230,14 @@
       {{- $mediaItems := "" -}}
       {{- range . -}}
         {{- if eq $featureImageURL "" -}}
+          {{- $previewURL := .preview_url | default "" -}}
+          {{- if strings.Contains $previewURL "/no-preview." -}}
+            {{- $previewURL = "" -}}
+          {{- end -}}
           {{- if eq .type "image" -}}
-            {{- $featureImageURL = .preview_url | default .url -}}
+            {{- $featureImageURL = $previewURL | default .url -}}
           {{- else if or (eq .type "gifv") (eq .type "video") -}}
-            {{- $featureImageURL = .preview_url | default "" -}}
+            {{- $featureImageURL = $previewURL -}}
           {{- end -}}
         {{- end -}}
         {{- $desc := .description | default (printf "Attached media from %s" $category) | htmlEscape -}}

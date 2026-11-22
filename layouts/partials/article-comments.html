@@ -372,8 +372,9 @@
       function renderMediaAttachments(attachments) {
         if (!Array.isArray(attachments) || attachments.length === 0) return '';
         return '<div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">' + attachments.map(function (att) {
-          const url = escapeHtml(att.url || att.preview_url || '');
-          const preview = escapeHtml(att.preview_url || att.url || '');
+          const rawPreview = att.preview_url && !att.preview_url.includes('/no-preview.') ? att.preview_url : '';
+          const url = escapeHtml(att.url || rawPreview || '');
+          const preview = escapeHtml(rawPreview || att.url || '');
           const desc = escapeHtml(att.description || 'Attached media');
           if (att.type === 'image') {
             return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"><img src="' + preview + '" alt="' + desc + '" loading="lazy" class="rounded-lg max-h-64 w-auto" /></a>';
