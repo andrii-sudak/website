@@ -229,20 +229,31 @@
     {{- if gt (len .) 0 -}}
       {{- $mediaItems := "" -}}
       {{- range . -}}
-        {{- if eq $featureImageURL "" -}}
-          {{- $previewURL := .preview_url | default "" -}}
-          {{- if strings.Contains $previewURL "/no-preview." -}}
-            {{- $previewURL = "" -}}
+        {{- $mediaURL := .url -}}
+        {{- $previewURL := .preview_url | default "" -}}
+        {{- if strings.Contains $previewURL "/no-preview." -}}
+          {{- $previewURL = "" -}}
+        {{- end -}}
+        {{- /* Prefer build-time converted JPEG for HEIC/HEIF Pixelfed attachments */ -}}
+        {{- if and (eq $source "pixelfed") .id -}}
+          {{- $safeAttId := replaceRE `[^A-Za-z0-9_-]` "" (printf "%v" .id) -}}
+          {{- if ne $safeAttId "" -}}
+            {{- with resources.Get (printf "media/pixelfed/%s.jpg" $safeAttId) -}}
+              {{- $mediaURL = .RelPermalink -}}
+              {{- $previewURL = .Permalink -}}
+            {{- end -}}
           {{- end -}}
+        {{- end -}}
+        {{- if eq $featureImageURL "" -}}
           {{- if eq .type "image" -}}
-            {{- $featureImageURL = $previewURL | default .url -}}
+            {{- $featureImageURL = $previewURL | default $mediaURL -}}
           {{- else if or (eq .type "gifv") (eq .type "video") -}}
             {{- $featureImageURL = $previewURL -}}
           {{- end -}}
         {{- end -}}
         {{- $desc := .description | default (printf "Attached media from %s" $category) | htmlEscape -}}
         {{- if eq .type "image" -}}
-          {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><a href="%s" target="_blank" rel="noopener noreferrer"><img src="%s" alt="%s" loading="lazy" decoding="async" class="rounded-lg max-h-[600px] w-auto mx-auto" /></a></figure>` $mediaItems .url .url $desc -}}
+          {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><a href="%s" target="_blank" rel="noopener noreferrer"><img src="%s" alt="%s" loading="lazy" decoding="async" class="rounded-lg max-h-[600px] w-auto mx-auto" /></a></figure>` $mediaItems $mediaURL $mediaURL $desc -}}
         {{- else if or (eq .type "gifv") (eq .type "video") -}}
           {{- $loopAttr := cond (eq .type "gifv") "autoplay loop muted playsinline" "playsinline" -}}
           {{- $mediaItems = printf `%s<figure class="mastodon-media-item my-4"><video src="%s" %s controls preload="metadata" aria-label="%s" class="rounded-lg max-h-[600px] w-auto mx-auto"></video></figure>` $mediaItems .url $loopAttr $desc -}}

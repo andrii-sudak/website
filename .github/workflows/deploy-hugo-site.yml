@@ -47,6 +47,12 @@ jobs:
       - name: Download Hugo Modules
         run: hugo mod get -u
 
+      - name: Convert Pixelfed HEIC media to JPEG
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libheif-examples
+          bash scripts/convert-pixelfed-heic.sh
+
       - name: Build with Hugo
         run: |
           hugo \

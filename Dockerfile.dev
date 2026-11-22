@@ -1,7 +1,7 @@
 FROM golang:1.27-bookworm
 
-# Install required dependencies: git for Go modules, nodejs/npm for PostCSS (often needed by themes), g++, etc.
-RUN apt-get update && apt-get install -y git tzdata g++ npm curl bash build-essential && rm -rf /var/lib/apt/lists/*
+# Install required dependencies: git for Go modules, nodejs/npm for PostCSS (often needed by themes), g++, libheif-examples/jq for HEIC conversion, etc.
+RUN apt-get update && apt-get install -y git tzdata g++ npm curl bash build-essential jq libheif-examples && rm -rf /var/lib/apt/lists/*
 
 # Download and install the latest extended version of Hugo for Linux
 RUN ARCH="$(uname -m)" && \

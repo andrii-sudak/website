@@ -11,7 +11,7 @@ services:
     environment:
       - HUGO_ENVIRONMENT=development
     restart: unless-stopped
-    command: [ "hugo", "server", "--bind=0.0.0.0", "--buildDrafts", "--buildFuture", "--disableFastRender", "--gc", "--cleanDestinationDir", "--logLevel", "info" ]
+    command: [ "bash", "-c", "./scripts/convert-pixelfed-heic.sh && hugo server --bind=0.0.0.0 --buildDrafts --buildFuture --disableFastRender --gc --cleanDestinationDir --ignoreCache --logLevel info" ]
 
 volumes:
   hugo-mod-cache:
