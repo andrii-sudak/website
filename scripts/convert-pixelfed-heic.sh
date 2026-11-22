@@ -70,7 +70,7 @@ process_json_stream() {
     tmp_in="${TMP_DIR}/${safe_id}.heic"
     tmp_out="${TMP_DIR}/${safe_id}.jpg"
     if curl -fsSL --max-time 30 "$att_url" -o "$tmp_in"; then
-      if heif-convert -q 85 "$tmp_in" "$tmp_out" >/dev/null 2>&1; then
+      if heif-convert -q 85 "$tmp_in" "$tmp_out" >/dev/null; then
         if [ -s "$tmp_out" ]; then
           mv "$tmp_out" "$out_file"
         elif [ -s "${TMP_DIR}/${safe_id}-1.jpg" ]; then
